@@ -34,7 +34,6 @@ export default class Register extends React.Component {
   handleSubmit = () => {
     const {
       isLoading,
-      username,
       fname,
       lname,
       email,
