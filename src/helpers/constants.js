@@ -1,9 +1,9 @@
 export default {
   URL: {
-    MAIN_URL: "http://localhost:8000/api/",
+    MAIN_URL: "https://sports-analytics-fyp.herokuapp.com/",
     AUTHENTICATION: {
-      SIGN_UP: "authentication/sign_up",
-      SIGN_IN: "authentication/sign_in",
+      SIGN_UP: "auth/signup",
+      SIGN_IN: "auth/signin",
     },
     PREDICTION: {
       WHO_WILL_WIN: "predict/who_will_win",

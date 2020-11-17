@@ -23,7 +23,6 @@ export default class Register extends React.Component {
     super(props);
     this.state = {
       isLoading: false,
-      username: "ahsanihsan",
       fname: "Ahsan",
       lname: "Ihsan",
       email: "ahsan.ihsan@outlook.com",
@@ -40,10 +39,9 @@ export default class Register extends React.Component {
       password,
       confirmPassword,
     } = this.state;
-    if (username && fname && lname && password && confirmPassword) {
+    if (fname && lname && password && confirmPassword) {
       this.setState({ isLoading: true });
       post(constants.URL.AUTHENTICATION.SIGN_UP, {
-        username,
         fname,
         lname,
         password,
@@ -108,25 +106,10 @@ export default class Register extends React.Component {
                     </CInputGroup>
                     <CInputGroup className="mb-3">
                       <CInputGroupPrepend>
-                        <CInputGroupText>
-                          <CIcon name="cil-user" />
-                        </CInputGroupText>
-                      </CInputGroupPrepend>
-                      <CInput
-                        type="text"
-                        placeholder="Username"
-                        value={this.state.username}
-                        autoComplete="username"
-                        onChange={(event) =>
-                          this.setState({ username: event.target.value })
-                        }
-                      />
-                    </CInputGroup>
-                    <CInputGroup className="mb-3">
-                      <CInputGroupPrepend>
                         <CInputGroupText>@</CInputGroupText>
                       </CInputGroupPrepend>
                       <CInput
+                        value={this.state.email}
                         onChange={(event) =>
                           this.setState({ email: event.target.value })
                         }
