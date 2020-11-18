@@ -12,7 +12,7 @@ export default class WhoWillWin extends Component {
     };
   }
 
-  handleSubmit = () => {
+  handleSubmit = async () => {
     this.setState({ isLoading: true });
     const {
       team_a,
@@ -22,8 +22,9 @@ export default class WhoWillWin extends Component {
       match_type,
       toss_decision,
       venue,
+      toss_won,
     } = this.state;
-    post(constants.URL.PREDICTION.WHO_WILL_WIN, {
+    let whoWillWin = await post(constants.URL.PREDICTION.WHO_WILL_WIN, {
       team_a,
       team_b,
       city,
@@ -31,20 +32,34 @@ export default class WhoWillWin extends Component {
       match_type,
       toss_decision,
       venue,
-    })
-      .then((response) => {
-        if (response && response.data) {
-          console.log(response);
-        }
-        this.setState({ isLoading: false });
-      })
-      .catch((error) => {
-        this.setState({ isLoading: false });
-        notification.error({
-          message:
-            "There was a problem fetching users, for you. Our team is looking at the issue on our servers.",
-        });
-      });
+      toss_won,
+    });
+    let runRate = await post(constants.URL.PREDICTION.RUN_RATE, {
+      match_type,
+      batting_team:
+        toss_won === team_a && toss_decision === "bat" ? team_a : team_b,
+      bowling_team:
+        toss_won === team_a && toss_decision === "field" ? team_a : team_b,
+      city,
+      month,
+    });
+    console.log("******* REQUESTING *****");
+    console.log(whoWillWin);
+    console.log(runRate);
+    console.log("******* REQUESTING *****");
+    // .then((response) => {
+    //   if (response && response.data) {
+    //     console.log(response);
+    //   }
+    //   this.setState({ isLoading: false });
+    // })
+    // .catch((error) => {
+    //   this.setState({ isLoading: false });
+    //   notification.error({
+    //     message:
+    //       "There was a problem fetching users, for you. Our team is looking at the issue on our servers.",
+    //   });
+    // });
   };
 
   render() {
@@ -60,7 +75,7 @@ export default class WhoWillWin extends Component {
                   placeholder="Select Team A"
                   style={{ width: "100%", borderRadius: 10, marginTop: 5 }}
                 >
-                  <Select.Option>Pakistan</Select.Option>
+                  <Select.Option value="Pakistan">Pakistan</Select.Option>
                 </Select>
               </div>
               <div style={{ marginTop: 10 }}>
@@ -109,6 +124,23 @@ export default class WhoWillWin extends Component {
                   <Select.Option value="Karachi">Karachi</Select.Option>
                 </Select>
               </div>
+              {this.state.team_a && this.state.team_b ? (
+                <div style={{ marginTop: 10 }}>
+                  <label>Toss Won</label>
+                  <Select
+                    onChange={(toss_won) => this.setState({ toss_won })}
+                    placeholder="Select Toss Winning Team"
+                    style={{ width: "100%", borderRadius: 10, marginTop: 5 }}
+                  >
+                    <Select.Option value={this.state.team_a}>
+                      {this.state.team_a}
+                    </Select.Option>
+                    <Select.Option value={this.state.team_b}>
+                      {this.state.team_b}
+                    </Select.Option>
+                  </Select>
+                </div>
+              ) : undefined}
               <div style={{ marginTop: 10 }}>
                 <label>Toss Decision</label>
                 <Select

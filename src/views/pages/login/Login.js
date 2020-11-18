@@ -17,7 +17,7 @@ import {
 import CIcon from "@coreui/icons-react";
 import constants from "../../../helpers/constants";
 
-import { message, notification } from "antd";
+import { Button, message, notification } from "antd";
 import { post } from "../../../helpers/request";
 
 class Login extends Component {
@@ -30,7 +30,7 @@ class Login extends Component {
     };
   }
   handleSubmit = () => {
-    const { isLoading, email, password } = this.state;
+    const { email, password } = this.state;
     if (email && password) {
       this.setState({ isLoading: true });
       post(constants.URL.AUTHENTICATION.SIGN_IN, {
@@ -49,6 +49,7 @@ class Login extends Component {
           }
         })
         .catch((error) => {
+          this.setState({ isLoading: false });
           notification.error({
             message:
               "There is a problem with our website, please try again later.",
@@ -104,13 +105,14 @@ class Login extends Component {
                       </CInputGroup>
                       <CRow>
                         <CCol xs="6">
-                          <CButton
-                            color="primary"
+                          <Button
+                            loading={this.state.isLoading}
+                            type="primary"
                             className="px-4"
                             onClick={() => this.handleSubmit()}
                           >
                             Login
-                          </CButton>
+                          </Button>
                         </CCol>
                         <CCol xs="6" className="text-right">
                           <CButton color="link" className="px-0">
