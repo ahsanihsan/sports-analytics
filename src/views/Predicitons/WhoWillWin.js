@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Card, Col, notification, Row, Select } from "antd";
+import { Button, Card, Col, notification, Row, Select, Spin } from "antd";
 import { MatchTypes, Months, Teams } from "../../helpers/Teams";
 import constants from "../../helpers/constants";
 import { post } from "../../helpers/request";
@@ -43,10 +43,17 @@ export default class WhoWillWin extends Component {
       city,
       month,
     });
-    console.log("******* REQUESTING *****");
-    console.log(whoWillWin);
-    console.log(runRate);
-    console.log("******* REQUESTING *****");
+
+    if (whoWillWin && runRate) {
+      this.setState({
+        whoWillWin: whoWillWin.data,
+        runRate: runRate.data,
+        isLoading: false,
+        predicted: true,
+      });
+    } else {
+      this.setState({ error: true, isLoading: false });
+    }
     // .then((response) => {
     //   if (response && response.data) {
     //     console.log(response);
@@ -178,7 +185,17 @@ export default class WhoWillWin extends Component {
             <Card
               title="Our Prediction"
               style={{ width: "100%", borderRadius: 10 }}
-            ></Card>
+            >
+              {this.state.isLoading ? (
+                <Spin />
+              ) : this.state.predicted ? (
+                <div>
+                  <p>Who Will Win</p>
+                </div>
+              ) : (
+                <div>Please select values to continue.</div>
+              )}
+            </Card>
           </Col>
         </Row>
       </div>
