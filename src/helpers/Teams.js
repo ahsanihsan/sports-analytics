@@ -1,11 +1,11 @@
 export const Teams = [
-  "Afghanistan",
+  // "Afghanistan",
   "Australia",
   "Bangladesh",
   "England",
   "India",
   "Ireland",
-  "Kenya",
+  // "Kenya",
   "New Zealand",
   "South Africa",
   "Scotland",

@@ -1,9 +1,12 @@
 import React, { Component } from "react";
-import { Button, Card, Col, notification, Row, Select } from "antd";
+import { Button, Card, Col, notification, Row, Select, Spin } from "antd";
 import { MatchTypes, Months, Teams } from "../../helpers/Teams";
 import constants from "../../helpers/constants";
 import { post } from "../../helpers/request";
-
+import ChartBarSimple from "../charts/ChartBarSimple";
+import ChartLineSimple from "../charts/ChartLineSimple";
+import { CChartBar } from "@coreui/react-chartjs";
+import { CWidgetDropdown } from "@coreui/react";
 export default class RunRate extends Component {
   constructor(props) {
     super(props);
@@ -14,23 +17,13 @@ export default class RunRate extends Component {
 
   handleSubmit = () => {
     this.setState({ isLoading: true });
-    const {
-      team_a,
-      team_b,
+    const { batting_team, bowling_team, city, month, match_type } = this.state;
+    post(constants.URL.PREDICTION.RUN_RATE, {
+      batting_team,
+      bowling_team,
       city,
       month,
       match_type,
-      toss_decision,
-      venue,
-    } = this.state;
-    post(constants.URL.PREDICTION.WHO_WILL_WIN, {
-      team_a,
-      team_b,
-      city,
-      month,
-      match_type,
-      toss_decision,
-      venue,
     })
       .then((response) => {
         if (response && response.data) {
@@ -46,7 +39,11 @@ export default class RunRate extends Component {
         });
       });
   };
-
+  onChange(bowling_team) {
+    console.log("******this state******");
+    console.log(bowling_team);
+    console.log("******this state******");
+  }
   render() {
     return (
       <div>
@@ -54,20 +51,20 @@ export default class RunRate extends Component {
           <Col span={9}>
             <Card title="Team Data" style={{ width: "100%", borderRadius: 10 }}>
               <div>
-                <label>Team A</label>
+                <label>Batting Team</label>
                 <Select
-                  onChange={(team_a) => this.setState({ team_a })}
-                  placeholder="Select Team A"
+                  onChange={(batting_team) => this.setState({ batting_team })}
+                  placeholder="Select Batting Team"
                   style={{ width: "100%", borderRadius: 10, marginTop: 5 }}
                 >
                   <Select.Option>Pakistan</Select.Option>
                 </Select>
               </div>
               <div style={{ marginTop: 10 }}>
-                <label>Team B</label>
+                <label>Bowling Team</label>
                 <Select
-                  onChange={(team_b) => this.setState({ team_b })}
-                  placeholder="Select Team B"
+                  onChange={(bowling_team) => this.onChange(bowling_team)}
+                  placeholder="Select Bowling Team"
                   style={{ width: "100%", borderRadius: 10, marginTop: 5 }}
                 >
                   {Teams.map((item) => {
@@ -109,29 +106,6 @@ export default class RunRate extends Component {
                   <Select.Option value="Karachi">Karachi</Select.Option>
                 </Select>
               </div>
-              <div style={{ marginTop: 10 }}>
-                <label>Toss Decision</label>
-                <Select
-                  onChange={(toss_decision) => this.setState({ toss_decision })}
-                  placeholder="Select Toss Decision"
-                  style={{ width: "100%", borderRadius: 10, marginTop: 5 }}
-                >
-                  <Select.Option value="bat">Bat</Select.Option>
-                  <Select.Option value="field">Field</Select.Option>
-                </Select>
-              </div>
-              <div style={{ marginTop: 10 }}>
-                <label>Venue</label>
-                <Select
-                  onChange={(venue) => this.setState({ venue })}
-                  placeholder="Select Venue"
-                  style={{ width: "100%", borderRadius: 10, marginTop: 5 }}
-                >
-                  <Select.Option value="National Stadium">
-                    National Stadium
-                  </Select.Option>
-                </Select>
-              </div>
               <Button
                 type="primary"
                 style={{ width: "100%", marginTop: 20 }}
@@ -143,10 +117,32 @@ export default class RunRate extends Component {
             </Card>
           </Col>
           <Col span={15}>
-            <Card
-              title="Our Prediction"
-              style={{ width: "100%", borderRadius: 10 }}
-            ></Card>
+            <Card title="Run Rate" style={{ width: "100%", borderRadius: 10 }}>
+              {this.state.isLoading ? (
+                <Spin />
+              ) : this.state.predicted ? (
+                <div>
+                  <CChartBar
+                    type="bar"
+                    datasets={[
+                      {
+                        label: "Run Rate",
+                        backgroundColor: "#f87979",
+                        data: this.state.runRate.prediction,
+                      },
+                    ]}
+                    labels={["10", "20", "30", "40", "50"]}
+                    options={{
+                      tooltips: {
+                        enabled: true,
+                      },
+                    }}
+                  />
+                </div>
+              ) : (
+                <div>Please select values to diplay run rate.</div>
+              )}
+            </Card>
           </Col>
         </Row>
       </div>
