@@ -1,6 +1,15 @@
 import React, { Component } from "react";
-import { Button, Card, Col, notification, Row, Select, Spin } from "antd";
-import { MatchTypes, Months, Teams } from "../../helpers/Teams";
+import {
+  Button,
+  Card,
+  Col,
+  notification,
+  Row,
+  Select,
+  Spin,
+  Table,
+} from "antd";
+import { cityAndVenue, MatchTypes, Months, Teams } from "../../helpers/Teams";
 import constants from "../../helpers/constants";
 import { post } from "../../helpers/request";
 import { CWidgetDropdown } from "@coreui/react";
@@ -15,13 +24,14 @@ export default class WhoWillWin extends Component {
       isLoading: false,
       team_a: "Pakistan",
       team_b: "India",
-      month: "January",
+      month: "February",
       match_type: "ODI",
       city: "Karachi",
       toss_won: "Pakistan",
       toss_decision: "bat",
       venue: "National Stadium",
     };
+    this.handleSubmit();
   }
 
   handleSubmit = async () => {
@@ -47,17 +57,6 @@ export default class WhoWillWin extends Component {
       toss_won,
     });
 
-    let teamScore = await post(constants.URL.PREDICTION.SCORE_OF_TEAMS, {
-      team_a,
-      team_b,
-      city,
-      month,
-      match_type,
-      toss_decision,
-      venue,
-      toss_won,
-    });
-
     let runRate = await post(constants.URL.PREDICTION.RUN_RATE, {
       match_type,
       batting_team:
@@ -69,6 +68,11 @@ export default class WhoWillWin extends Component {
     });
 
     if (whoWillWin && runRate) {
+      let previousMatches = whoWillWin.data.data;
+      let matchHistory = [];
+      previousMatches.map((item) => {
+        matchHistory.push(item);
+      });
       let totalScore = 0;
       let runRateRound = [];
       runRate.data.prediction.map((item) => {
@@ -80,28 +84,88 @@ export default class WhoWillWin extends Component {
         whoWillWin: whoWillWin.data,
         runRate: runRate.data,
         totalScore: Math.round(totalScore),
+        matchHistory,
         isLoading: false,
         predicted: true,
       });
     } else {
       this.setState({ error: true, isLoading: false });
     }
-    // .then((response) => {
-    //   if (response && response.data) {
-    //     console.log(response);
-    //   }
-    //   this.setState({ isLoading: false });
-    // })
-    // .catch((error) => {
-    //   this.setState({ isLoading: false });
-    //   notification.error({
-    //     message:
-    //       "There was a problem fetching users, for you. Our team is looking at the issue on our servers.",
-    //   });
-    // });
+  };
+
+  mapVenue = (city) => {
+    let venue = [];
+    cityAndVenue.map((item) => {
+      if (item.city === city) {
+        item.venue.map((venueCity) => {
+          venue.push(
+            <Select.Option value={venueCity}>{venueCity}</Select.Option>
+          );
+        });
+      }
+    });
+    return venue;
   };
 
   render() {
+    const columns = [
+      {
+        title: "City",
+        dataIndex: "city",
+        key: "city",
+      },
+      {
+        title: "Team A",
+        dataIndex: "team_a",
+        key: "team_a",
+      },
+      {
+        title: "Team B",
+        dataIndex: "team_b",
+        key: "team_b",
+      },
+      {
+        title: "Score Team A",
+        dataIndex: "score_a",
+        key: "score_a",
+      },
+      {
+        title: "Score Team B",
+        dataIndex: "score_b",
+        key: "score_b",
+      },
+      {
+        title: "Match Type",
+        dataIndex: "match_type",
+        key: "match_type",
+      },
+      {
+        title: "Month",
+        dataIndex: "month",
+        key: "month",
+      },
+      {
+        title: "Winner",
+        dataIndex: "winner",
+        key: "winner",
+      },
+      {
+        title: "Venue",
+        dataIndex: "venue",
+        key: "venue",
+      },
+      {
+        title: "Toss Won",
+        dataIndex: "toss_won",
+        key: "toss_won",
+      },
+      {
+        title: "Toss Decision",
+        dataIndex: "toss_decision",
+        key: "toss_decision",
+      },
+    ];
+
     return (
       <div>
         <Row gutter={10}>
@@ -157,17 +221,6 @@ export default class WhoWillWin extends Component {
                   })}
                 </Select>
               </div>
-              <div style={{ marginTop: 10 }}>
-                <label>City</label>
-                <Select
-                  value={this.state.city}
-                  onChange={(city) => this.setState({ city })}
-                  placeholder="Select City"
-                  style={{ width: "100%", borderRadius: 10, marginTop: 5 }}
-                >
-                  <Select.Option value="Karachi">Karachi</Select.Option>
-                </Select>
-              </div>
               {this.state.team_a && this.state.team_b ? (
                 <div style={{ marginTop: 10 }}>
                   <label>Toss Won</label>
@@ -199,18 +252,35 @@ export default class WhoWillWin extends Component {
                 </Select>
               </div>
               <div style={{ marginTop: 10 }}>
-                <label>Venue</label>
+                <label>City</label>
                 <Select
-                  value={this.state.venue}
-                  onChange={(venue) => this.setState({ venue })}
-                  placeholder="Select Venue"
+                  value={this.state.city}
+                  onChange={(city) => this.setState({ city })}
+                  placeholder="Select City"
                   style={{ width: "100%", borderRadius: 10, marginTop: 5 }}
                 >
-                  <Select.Option value="National Stadium">
-                    National Stadium
-                  </Select.Option>
+                  {cityAndVenue.map((item) => {
+                    return (
+                      <Select.Option value={item.city}>
+                        {item.city}
+                      </Select.Option>
+                    );
+                  })}
                 </Select>
               </div>
+              {this.state.city ? (
+                <div style={{ marginTop: 10 }}>
+                  <label>Venue</label>
+                  <Select
+                    value={this.state.venue}
+                    onChange={(venue) => this.setState({ venue })}
+                    placeholder="Select Venue"
+                    style={{ width: "100%", borderRadius: 10, marginTop: 5 }}
+                  >
+                    {this.mapVenue(this.state.city)}
+                  </Select>
+                </div>
+              ) : undefined}
               <Button
                 type="primary"
                 style={{ width: "100%", marginTop: 20 }}
@@ -293,6 +363,17 @@ export default class WhoWillWin extends Component {
             </Card>
           </Col>
         </Row>
+        <Card
+          title="History"
+          style={{
+            width: "100%",
+            borderRadius: 10,
+            marginTop: 20,
+            marginBottom: 20,
+          }}
+        >
+          <Table columns={columns} dataSource={this.state.matchHistory} />
+        </Card>
       </div>
     );
   }
