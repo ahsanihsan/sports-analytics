@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import { Button, Card, Col, notification, Row, Select, Spin } from "antd";
-import { MatchTypes, Months, Teams } from "../../helpers/Teams";
+import {
+  cityAndVenue,
+  MatchTypes,
+  Months,
+  TeamsPakistan,
+} from "../../helpers/Teams";
 import constants from "../../helpers/constants";
 import { post } from "../../helpers/request";
-import ChartBarSimple from "../charts/ChartBarSimple";
-import ChartLineSimple from "../charts/ChartLineSimple";
 import { CChartBar } from "@coreui/react-chartjs";
-import { CWidgetDropdown } from "@coreui/react";
 export default class RunRate extends Component {
   constructor(props) {
     super(props);
@@ -27,7 +29,7 @@ export default class RunRate extends Component {
     })
       .then((response) => {
         if (response && response.data) {
-          console.log(response);
+          this.setState({ runRate: response.data.prediction, predicted: true });
         }
         this.setState({ isLoading: false });
       })
@@ -39,11 +41,7 @@ export default class RunRate extends Component {
         });
       });
   };
-  onChange(bowling_team) {
-    console.log("******this state******");
-    console.log(bowling_team);
-    console.log("******this state******");
-  }
+
   render() {
     return (
       <div>
@@ -57,18 +55,22 @@ export default class RunRate extends Component {
                   placeholder="Select Batting Team"
                   style={{ width: "100%", borderRadius: 10, marginTop: 5 }}
                 >
-                  <Select.Option>Pakistan</Select.Option>
+                  {TeamsPakistan.map((item) => {
+                    if (item !== this.state.bowling_team)
+                      return <Select.Option value={item}>{item}</Select.Option>;
+                  })}
                 </Select>
               </div>
               <div style={{ marginTop: 10 }}>
                 <label>Bowling Team</label>
                 <Select
-                  onChange={(bowling_team) => this.onChange(bowling_team)}
+                  onChange={(bowling_team) => this.setState({ bowling_team })}
                   placeholder="Select Bowling Team"
                   style={{ width: "100%", borderRadius: 10, marginTop: 5 }}
                 >
-                  {Teams.map((item) => {
-                    return <Select.Option value={item}>{item}</Select.Option>;
+                  {TeamsPakistan.map((item) => {
+                    if (item !== this.state.batting_team)
+                      return <Select.Option value={item}>{item}</Select.Option>;
                   })}
                 </Select>
               </div>
@@ -99,11 +101,18 @@ export default class RunRate extends Component {
               <div style={{ marginTop: 10 }}>
                 <label>City</label>
                 <Select
+                  value={this.state.city}
                   onChange={(city) => this.setState({ city })}
                   placeholder="Select City"
                   style={{ width: "100%", borderRadius: 10, marginTop: 5 }}
                 >
-                  <Select.Option value="Karachi">Karachi</Select.Option>
+                  {cityAndVenue.map((item) => {
+                    return (
+                      <Select.Option value={item.city}>
+                        {item.city}
+                      </Select.Option>
+                    );
+                  })}
                 </Select>
               </div>
               <Button
@@ -128,7 +137,7 @@ export default class RunRate extends Component {
                       {
                         label: "Run Rate",
                         backgroundColor: "#f87979",
-                        data: this.state.runRate.prediction,
+                        data: this.state.runRate,
                       },
                     ]}
                     labels={["10", "20", "30", "40", "50"]}
@@ -140,7 +149,7 @@ export default class RunRate extends Component {
                   />
                 </div>
               ) : (
-                <div>Please select values to diplay run rate.</div>
+                <div>Please select values to display run rate.</div>
               )}
             </Card>
           </Col>
