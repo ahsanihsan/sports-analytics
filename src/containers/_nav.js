@@ -11,6 +11,12 @@ export default [
     to: "/users",
     icon: "cil-user",
   },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Who Will Win",
+    to: "/who-will-win",
+    icon: "cil-hand-peace",
+  },
   // {
   //   _tag: "CSidebarNavTitle",
   //   _children: ["Theme"],

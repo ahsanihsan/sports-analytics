@@ -14,7 +14,7 @@ import {
   CRow,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
-import { message } from "antd";
+import { message, notification } from "antd";
 import { post } from "../../../helpers/request";
 import constants from "../../../helpers/constants";
 
@@ -48,14 +48,20 @@ export default class Register extends React.Component {
         email,
       })
         .then((response) => {
-          console.log("****** RESPONSE *****");
-          console.log(response);
-          console.log("****** RESPONSE *****");
+          this.setState({ isLoading: false });
+          if (response && response.status === 200) {
+            this.props.history.goBack();
+          } else {
+            notification.error({
+              message: response.data.message,
+            });
+          }
         })
         .catch((error) => {
-          console.log("****** ERROR *****");
-          console.log(error);
-          console.log("****** ERROR *****");
+          notification.error({
+            message:
+              "There is a problem with our website, please try again later.",
+          });
         });
     } else {
       message.error("Please enter all data to continue");

@@ -59,11 +59,16 @@ const Typography = React.lazy(() =>
 const Widgets = React.lazy(() => import("./views/widgets/Widgets"));
 const Users = React.lazy(() => import("./views/users/Users"));
 const User = React.lazy(() => import("./views/users/User"));
-
+const WhoWillWin = React.lazy(() => import("./views/Predicitons/WhoWillWin"));
 const routes = [
   // { path: "/", exact: true, name: "Home" },
   { path: "/dashboard", name: "Dashboard", component: Dashboard },
-  { path: "/theme", name: "Theme", component: Colors, exact: true },
+  {
+    path: "/who-will-win",
+    name: "Who Will Win",
+    component: WhoWillWin,
+    exact: true,
+  },
   { path: "/theme/colors", name: "Colors", component: Colors },
   { path: "/theme/typography", name: "Typography", component: Typography },
   { path: "/base", name: "Base", component: Cards, exact: true },

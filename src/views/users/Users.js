@@ -1,62 +1,72 @@
 import React, { useState, useEffect } from "react";
-import { useHistory, useLocation } from "react-router-dom";
-import {
-  CBadge,
-  CCard,
-  CCardBody,
-  CCardHeader,
-  CCol,
-  CDataTable,
-  CRow,
-  CPagination,
-} from "@coreui/react";
+import { CRow } from "@coreui/react";
 
 import usersData from "./UsersData";
-import { Table } from "antd";
+import { notification, Table } from "antd";
+import { get } from "../../helpers/request";
+import constants from "../../helpers/constants";
 
-const Users = () => {
-  const dataSource = [
-    {
-      key: "1",
-      name: "Mike",
-      age: 32,
-      address: "10 Downing Street",
-    },
-    {
-      key: "2",
-      name: "John",
-      age: 42,
-      address: "10 Downing Street",
-    },
-  ];
-
-  const columns = [
-    {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "Age",
-      dataIndex: "age",
-      key: "age",
-    },
-    {
-      title: "Address",
-      dataIndex: "address",
-      key: "address",
-    },
-  ];
-  return (
-    <CRow>
-      <Table
-        dataSource={dataSource}
-        columns={columns}
-        bordered
-        style={{ width: "100%" }}
-      />
-    </CRow>
-  );
-};
+class Users extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: true,
+    };
+  }
+  componentDidMount() {
+    get(constants.URL.USER.GET_ALL_USERS)
+      .then((response) => {
+        if (response && response.data) {
+          let users = response.data;
+          users.map((item) => {
+            item.roles = item.roles[0].name;
+          });
+          console.log(users);
+          this.setState({ users, isLoading: false });
+        }
+      })
+      .catch((error) => {
+        notification.error({
+          message:
+            "There was a problem fetching users, for you. Our team is looking at the issue on our servers.",
+        });
+      });
+  }
+  render() {
+    const columns = [
+      {
+        title: "First Name",
+        dataIndex: "fname",
+        key: "fname",
+      },
+      {
+        title: "Last Name",
+        dataIndex: "lname",
+        key: "lname",
+      },
+      {
+        title: "Email",
+        dataIndex: "email",
+        key: "email",
+      },
+      {
+        title: "Role",
+        dataIndex: "roles",
+        key: "roles",
+      },
+    ];
+    return (
+      <CRow>
+        <Table
+          dataSource={this.state.users}
+          columns={columns}
+          bordered
+          loading={this.state.isLoading}
+          style={{ width: "100%" }}
+        />
+      </CRow>
+    );
+  }
+}
 
 export default Users;
