@@ -3,19 +3,19 @@ export default [
     _tag: "CSidebarNavItem",
     name: "Dashboard",
     to: "/dashboard",
-    icon: "cil-speedometer",
+    // icon: "cil-speedometer",
   },
   {
     _tag: "CSidebarNavItem",
     name: "Users",
     to: "/users",
-    icon: "cil-user",
+    // icon: "cil-user",
   },
   {
     _tag: "CSidebarNavItem",
     name: "Who Will Win",
     to: "/who-will-win",
-    icon: "cil-hand-peace",
+    // icon: "cil-hand-peace",
   },
   {
     _tag: "CSidebarNavItem",
@@ -163,7 +163,7 @@ export default [
     _tag: "CSidebarNavItem",
     name: "Charts",
     to: "/charts",
-    icon: "cil-chart-pie",
+    // icon: "cil-chart-pie",
   },
   // {
   //   _tag: "CSidebarNavDropdown",
