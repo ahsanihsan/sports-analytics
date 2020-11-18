@@ -9,7 +9,7 @@ export default {
       SIGN_IN: "auth/signin",
     },
     PREDICTION: {
-      WHO_WILL_WIN: "predict/who-will-win",
+      WHO_WILL_WIN: "prediction/who-will-win",
       WILL_BATSMAN_GET_OUT: "predict/will_batsman_get_out",
       WHAT_SCORE_WILL_BATSMAN_MAKE: "predict/what_score_will_batsman_make",
       RUN_RATE: "predict/runrate",
