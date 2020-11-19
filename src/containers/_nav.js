@@ -21,7 +21,11 @@ export default [
     _tag: "CSidebarNavItem",
     name: "Run Rate",
     to: "/runrate",
-    icon: "cil-hand-peace",
+  },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Team Scores",
+    to: "/score-of-teams",
   },
   // {
   //   _tag: "CSidebarNavTitle",
