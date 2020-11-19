@@ -19,6 +19,7 @@ import constants from "../../../helpers/constants";
 
 import { Button, message, notification } from "antd";
 import { post } from "../../../helpers/request";
+import "./index.css";
 
 class Login extends Component {
   constructor(props) {
@@ -61,9 +62,25 @@ class Login extends Component {
   };
   render() {
     return (
-      <div className="c-app c-default-layout flex-row align-items-center">
+      <div className="c-app c-default-layout flex-row main-bg-container">
         <CContainer>
-          <CRow className="justify-content-center">
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: 100,
+              alignItems: "center",
+            }}
+          >
+            <img
+              src={require("../../../assets/icons/logo.png")}
+              style={{ width: 200, height: 200 }}
+            />
+            <p style={{ color: "#fff", marginTop: 50, fontSize: 50 }}>
+              Sports Analytics
+            </p>
+          </div>
+          <CRow className="justify-content-center" style={{ marginTop: 60 }}>
             <CCol md="8">
               <CCardGroup>
                 <CCard className="p-4">
@@ -114,28 +131,42 @@ class Login extends Component {
                             Login
                           </Button>
                         </CCol>
-                        <CCol xs="6" className="text-right">
+                        {/* <CCol xs="6" className="text-right">
                           <CButton color="link" className="px-0">
                             Forgot password?
                           </CButton>
-                        </CCol>
+                        </CCol> */}
                       </CRow>
                     </CForm>
                   </CCardBody>
                 </CCard>
                 <CCard
-                  className="text-white bg-primary py-5 d-md-down-none"
+                  className="text-white py-5 d-md-down-none"
                   style={{ width: "44%" }}
                 >
                   <CCardBody className="text-center">
                     <div>
                       <h2>Sign up</h2>
-                      <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing
-                        elit, sed do eiusmod tempor incididunt ut labore et
-                        dolore magna aliqua.
+                      <p
+                        style={{
+                          color: "#768192",
+                          marginTop: 20,
+                          marginBottom: 20,
+                        }}
+                      >
+                        Our website offers you the best prediction regarding any
+                        case that you want, using the best and most efficient
+                        algorithms and by predicting the cases using the
+                        previous data of all the players, teams and matches.
                       </p>
-                      <Link to="/register">
+                      <Button
+                        type="primary"
+                        className="px-4"
+                        onClick={() => this.props.history.push("/register")}
+                      >
+                        Register Now!
+                      </Button>
+                      {/* <Link to="/register">
                         <CButton
                           color="primary"
                           className="mt-3"
@@ -144,7 +175,7 @@ class Login extends Component {
                         >
                           Register Now!
                         </CButton>
-                      </Link>
+                      </Link> */}
                     </div>
                   </CCardBody>
                 </CCard>

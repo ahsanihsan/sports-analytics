@@ -15,9 +15,9 @@ import { post } from "../../helpers/request";
 import { CWidgetDropdown } from "@coreui/react";
 import ChartBarSimple from "../charts/ChartBarSimple";
 import ChartLineSimple from "../charts/ChartLineSimple";
-import { CChartBar } from "@coreui/react-chartjs";
+import { CChartBar, CChartLine } from "@coreui/react-chartjs";
 
-export default class WhoWillWin extends Component {
+export default class BatsmanGetsBowled extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -45,7 +45,7 @@ export default class WhoWillWin extends Component {
       venue,
       toss_won,
     } = this.state;
-    let whoWillWin = await post(constants.URL.PREDICTION.WHO_WILL_WIN, {
+    let whoWillWin = await post(constants.URL.PREDICTION.SCORE_OF_TEAMS, {
       team_a,
       team_b,
       city,
@@ -55,34 +55,31 @@ export default class WhoWillWin extends Component {
       venue,
       toss_won,
     });
-
-    let runRate = await post(constants.URL.PREDICTION.RUN_RATE, {
+    let runRateTeamA = await post(constants.URL.PREDICTION.RUN_RATE, {
       match_type,
-      batting_team:
-        toss_won === team_a && toss_decision === "bat" ? team_a : team_b,
-      bowling_team:
-        toss_won === team_a && toss_decision === "field" ? team_a : team_b,
+      batting_team: team_a,
+      bowling_team: team_b,
+      city,
+      month,
+    });
+    let runRateTeamB = await post(constants.URL.PREDICTION.RUN_RATE, {
+      match_type,
+      batting_team: team_b,
+      bowling_team: team_a,
       city,
       month,
     });
 
-    if (whoWillWin && runRate) {
+    if (whoWillWin && runRateTeamA && runRateTeamB) {
       let previousMatches = whoWillWin.data.data;
       let matchHistory = [];
       previousMatches.map((item) => {
         matchHistory.push(item);
       });
-      let totalScore = 0;
-      let runRateRound = [];
-      runRate.data.prediction.map((item) => {
-        runRateRound.push(Math.round(item));
-        const perTenOvers = item * 10;
-        totalScore += perTenOvers;
-      });
       this.setState({
-        whoWillWin: whoWillWin.data,
-        runRate: runRate.data,
-        totalScore: Math.round(totalScore),
+        whoWillWin: whoWillWin.data.prediction,
+        runRateTeamA: runRateTeamA.data,
+        runRateTeamB: runRateTeamB.data,
         matchHistory,
         isLoading: false,
         predicted: true,
@@ -164,6 +161,8 @@ export default class WhoWillWin extends Component {
         key: "toss_decision",
       },
     ];
+    let arr = [];
+    // arr.push(this.state.whoWillWin);
 
     return (
       <div>
@@ -300,60 +299,93 @@ export default class WhoWillWin extends Component {
               ) : this.state.predicted ? (
                 <div>
                   <Row gutter={10}>
-                    <Col span={12}>
-                      <CWidgetDropdown
-                        color="gradient-warning"
-                        header={this.state.whoWillWin.prediction}
-                        text="Winner Team"
-                        footerSlot={
-                          <ChartLineSimple
-                            dataPoints={this.state.runRate.prediction}
-                            className="mt-3"
-                            style={{ height: "70px" }}
-                            backgroundColor="rgba(255,255,255,.2)"
-                            options={{
-                              elements: { line: { borderWidth: 2.5 } },
-                            }}
-                            pointHoverBackgroundColor="warning"
-                            label="Run Rate"
-                            labels="runrate"
-                          />
-                        }
-                      />
-                    </Col>
-                    <Col span={12}>
-                      <CWidgetDropdown
-                        color="gradient-primary"
-                        header={this.state.totalScore}
-                        text="Team Total Score"
-                        footerSlot={
-                          <ChartBarSimple
-                            dataPoints={this.state.runRate.prediction}
-                            className="mt-3 mx-3"
-                            style={{ height: "70px" }}
-                            backgroundColor="rgb(250, 250, 250, 0.5)"
-                            label="Run Rate"
-                            labels="runrate"
-                          />
-                        }
-                      />
-                    </Col>
+                    <CWidgetDropdown
+                      color="gradient-warning"
+                      header={
+                        this.state.whoWillWin.team_a >
+                        this.state.whoWillWin.team_b
+                          ? this.state.team_a
+                          : this.state.team_b
+                      }
+                      style={{ width: "100%" }}
+                      text="Winner Team"
+                      footerSlot={
+                        <ChartLineSimple
+                          dataPoints={
+                            this.state.whoWillWin.team_a >
+                            this.state.whoWillWin.team_b
+                              ? this.state.runRateTeamA.prediction
+                              : this.state.runRateTeamB.prediction
+                          }
+                          className="mt-3"
+                          style={{ height: "70px" }}
+                          backgroundColor="rgba(255,255,255,.2)"
+                          options={{
+                            elements: { line: { borderWidth: 2.5 } },
+                          }}
+                          pointHoverBackgroundColor="warning"
+                          label="Run Rate"
+                          labels="runrate"
+                        />
+                      }
+                    />
+                    <Row gutter={10}>
+                      <Col span={12}>
+                        <CWidgetDropdown
+                          color="gradient-primary"
+                          header={this.state.whoWillWin.team_a}
+                          text={"Team " + this.state.team_a + " Total Score"}
+                          footerSlot={
+                            <ChartBarSimple
+                              dataPoints={this.state.runRateTeamA.prediction}
+                              className="mt-3 mx-3"
+                              style={{ height: "70px" }}
+                              backgroundColor="rgb(250, 250, 250, 0.5)"
+                              label="Run Rate"
+                              labels="runrate"
+                            />
+                          }
+                        />
+                      </Col>
+                      <Col span={12}>
+                        <CWidgetDropdown
+                          color="gradient-primary"
+                          header={this.state.whoWillWin.team_b}
+                          text={"Team " + this.state.team_b + " Total Score"}
+                          footerSlot={
+                            <ChartBarSimple
+                              dataPoints={this.state.runRateTeamB.prediction}
+                              className="mt-3 mx-3"
+                              style={{ height: "70px" }}
+                              backgroundColor="rgb(250, 250, 250, 0.5)"
+                              label="Run Rate"
+                              labels="runrate"
+                            />
+                          }
+                        />
+                      </Col>
+                    </Row>
                   </Row>
-                  <CChartBar
-                    type="bar"
+                  <CChartLine
+                    type="line"
                     datasets={[
                       {
-                        label: "Run Rate",
-                        backgroundColor: "#f87979",
-                        data: this.state.runRate.prediction,
+                        label: "Run Rate of " + this.state.team_a,
+                        backgroundColor: "rgb(228,102,81,0.9)",
+                        data: this.state.runRateTeamA.prediction,
+                      },
+                      {
+                        label: "Run Rate of " + this.state.team_b,
+                        backgroundColor: "rgb(0,216,255,0.9)",
+                        data: this.state.runRateTeamB.prediction,
                       },
                     ]}
-                    labels={["10", "20", "30", "40", "50"]}
                     options={{
                       tooltips: {
                         enabled: true,
                       },
                     }}
+                    labels={["10", "20", "30", "40", "50"]}
                   />
                 </div>
               ) : (

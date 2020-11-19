@@ -62,6 +62,9 @@ const User = React.lazy(() => import("./views/users/User"));
 const WhoWillWin = React.lazy(() => import("./views/Predicitons/WhoWillWin"));
 const RunRate = React.lazy(() => import("./views/Predicitons/RunRate"));
 const TeamScores = React.lazy(() => import("./views/Predicitons/TeamScores"));
+const BatsmanGetsBowled = React.lazy(() =>
+  import("./views/Predicitons/BatsmanGetsBowled")
+);
 const routes = [
   // { path: "/", exact: true, name: "Home" },
   { path: "/dashboard", name: "Dashboard", component: Dashboard },
@@ -81,6 +84,12 @@ const routes = [
     path: "/score-of-teams",
     name: "Team Scores",
     component: TeamScores,
+    exact: true,
+  },
+  {
+    path: "/batsman-gets-bowled",
+    name: "Batsman Gets Bowled",
+    component: BatsmanGetsBowled,
     exact: true,
   },
   { path: "/theme/colors", name: "Colors", component: Colors },

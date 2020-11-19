@@ -8,11 +8,11 @@ import {
   CImg,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
-const onClick = () => {
-  // window.localStorage.setItem("isLogin", false);
-  this.props.history.push("/login");
-};
-const TheHeaderDropdown = () => {
+const TheHeaderDropdown = (props) => {
+  const onClick = () => {
+    // window.localStorage.setItem("isLogin", false);
+    props.history.push("/");
+  };
   return (
     <CDropdown inNav className="c-header-nav-items mx-2" direction="down">
       <CDropdownToggle className="c-header-nav-link" caret={false}>
@@ -37,7 +37,7 @@ const TheHeaderDropdown = () => {
           Settings
         </CDropdownItem>
         <CDropdownItem divider />
-        <CDropdownItem onClick={onClick}>
+        <CDropdownItem onClick={() => onClick()}>
           <CIcon name="cil-lock-locked" className="mfe-2" />
           Logout
         </CDropdownItem>

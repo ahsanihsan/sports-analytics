@@ -1,0 +1,6 @@
+.main-bg-container {
+  background-image: url("../../../assets/icons/background.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}

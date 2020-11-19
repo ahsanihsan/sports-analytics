@@ -17,6 +17,7 @@ import CIcon from "@coreui/icons-react";
 import { message, notification } from "antd";
 import { post } from "../../../helpers/request";
 import constants from "../../../helpers/constants";
+import "../login/index.css";
 
 export default class Register extends React.Component {
   constructor(props) {
@@ -69,9 +70,25 @@ export default class Register extends React.Component {
   };
   render() {
     return (
-      <div className="c-app c-default-layout flex-row align-items-center">
+      <div className="c-app c-default-layout flex-row main-bg-container">
         <CContainer>
-          <CRow className="justify-content-center">
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: 100,
+              alignItems: "center",
+            }}
+          >
+            <img
+              src={require("../../../assets/icons/logo.png")}
+              style={{ width: 200, height: 200 }}
+            />
+            <p style={{ color: "#fff", marginTop: 50, fontSize: 50 }}>
+              Sports Analytics
+            </p>
+          </div>
+          <CRow className="justify-content-center" style={{ marginTop: 60 }}>
             <CCol md="9" lg="7" xl="6">
               <CCard className="mx-4">
                 <CCardBody className="p-4">

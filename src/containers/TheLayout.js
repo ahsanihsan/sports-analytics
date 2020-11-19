@@ -1,12 +1,12 @@
 import React from "react";
 import { TheContent, TheSidebar, TheFooter, TheHeader } from "./index";
 
-const TheLayout = () => {
+const TheLayout = (props) => {
   return (
     <div className="c-app c-default-layout">
       <TheSidebar />
       <div className="c-wrapper">
-        <TheHeader />
+        <TheHeader {...props} />
         <div className="c-body">
           <TheContent />
         </div>

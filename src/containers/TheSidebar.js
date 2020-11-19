@@ -32,11 +32,16 @@ const TheSidebar = () => {
           name="logo-negative"
           height={35}
         /> */}
-        <CIcon
+        {/* <CIcon
           className="c-sidebar-brand-minimized"
           name="cricket"
           height={35}
+        /> */}
+        <img
+          src={require("../assets/icons/logo.png")}
+          style={{ width: 50, height: 50 }}
         />
+        <h3 style={{ color: "#fff", marginTop: 10 }}>Sports Analytics</h3>
       </CSidebarBrand>
       <CSidebarNav>
         <CCreateElement

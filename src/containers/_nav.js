@@ -27,6 +27,11 @@ export default [
     name: "Team Scores",
     to: "/score-of-teams",
   },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Batsman Gets Bowled",
+    to: "/batsman-gets-bowled",
+  },
   // {
   //   _tag: "CSidebarNavTitle",
   //   _children: ["Theme"],
