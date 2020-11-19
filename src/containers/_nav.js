@@ -27,6 +27,11 @@ export default [
     name: "Team Scores",
     to: "/score-of-teams",
   },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Batsman Scores",
+    to: "/batsman-scores",
+  },
   // {
   //   _tag: "CSidebarNavTitle",
   //   _children: ["Theme"],

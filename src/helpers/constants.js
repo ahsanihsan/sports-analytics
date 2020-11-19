@@ -12,7 +12,7 @@ export default {
     PREDICTION: {
       WHO_WILL_WIN: "prediction/who_will_win",
       WILL_BATSMAN_GET_OUT: "prediction/will_batsman_get_out",
-      WHAT_SCORE_WILL_BATSMAN_MAKE: "prediction/what_score_will_batsman_make",
+      WHAT_SCORE_WILL_BATSMAN_MAKE: "prediction/what_score_batsman_makes",
       RUN_RATE: "prediction/run_rate",
       SCORE_OF_TEAMS: "prediction/score_of_teams",
     },
