@@ -14,7 +14,7 @@ import {
   CRow,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
-import { message, notification } from "antd";
+import { Button, message, notification } from "antd";
 import { post } from "../../../helpers/request";
 import constants from "../../../helpers/constants";
 import "../login/index.css";
@@ -24,11 +24,11 @@ export default class Register extends React.Component {
     super(props);
     this.state = {
       isLoading: false,
-      fname: "Ahsan",
-      lname: "Ihsan",
-      email: "ahsan.ihsan@outlook.com",
-      password: "ahsan11343",
-      confirmPassword: "ahsan11343",
+      fname: "",
+      lname: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
     };
   }
   handleSubmit = () => {
@@ -173,13 +173,16 @@ export default class Register extends React.Component {
                         }
                       />
                     </CInputGroup>
-                    <CButton
-                      color="success"
+                    <Button
+                      type="primary"
                       block
-                      onClick={() => this.handleSubmit()}
+                      loading={this.state.isLoading}
+                      onClick={() => {
+                        this.handleSubmit();
+                      }}
                     >
                       Create Account
-                    </CButton>
+                    </Button>
                   </CForm>
                 </CCardBody>
               </CCard>

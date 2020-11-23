@@ -7,9 +7,6 @@ const Dashboard = () => {
   return (
     <>
       <WidgetsDropdown />
-      <CCard>
-        <CCardBody></CCardBody>
-      </CCard>
     </>
   );
 };

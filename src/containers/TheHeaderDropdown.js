@@ -25,18 +25,13 @@ const TheHeaderDropdown = (props) => {
         </div>
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">
-        <CDropdownItem header tag="div" color="light" className="text-center">
+        {/* <CDropdownItem header tag="div" color="light" className="text-center">
           <strong>Settings</strong>
-        </CDropdownItem>
+        </CDropdownItem> */}
         <CDropdownItem>
           <CIcon name="cil-user" className="mfe-2" />
           Profile
         </CDropdownItem>
-        <CDropdownItem>
-          <CIcon name="cil-settings" className="mfe-2" />
-          Settings
-        </CDropdownItem>
-        <CDropdownItem divider />
         <CDropdownItem onClick={() => onClick()}>
           <CIcon name="cil-lock-locked" className="mfe-2" />
           Logout

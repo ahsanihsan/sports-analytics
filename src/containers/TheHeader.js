@@ -92,10 +92,10 @@ const TheHeader = (props) => {
             >
               <CIcon name="cil-graph" alt="Dashboard" />&nbsp;Dashboard
             </CLink> */}
-          <CLink className="c-subheader-nav-link" href="#">
+          {/* <CLink className="c-subheader-nav-link" href="#">
             <CIcon name="cil-settings" alt="Settings" />
             &nbsp;Settings
-          </CLink>
+          </CLink> */}
         </div>
       </CSubheader>
     </CHeader>
