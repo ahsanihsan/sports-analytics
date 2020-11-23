@@ -1,9 +1,10 @@
 export default {
   URL: {
-    MAIN_URL: "http://localhost:8080/",
+    MAIN_URL: "http://192.168.18.2:8080/",
     // MAIN_URL: "https://sports-analytics-fyp.herokuapp.com/",
     USER: {
       GET_ALL_USERS: "users/all",
+      BLACK_LIST_USER: "users/black-list/",
     },
     AUTHENTICATION: {
       SIGN_UP: "auth/signup",

@@ -42,6 +42,7 @@ class Login extends Component {
           this.setState({ isLoading: false });
           if (response && response.status === 200) {
             window.localStorage.setItem("@token", response.data.accessToken);
+            window.localStorage.setItem("@role", response.data.roles[0]);
             this.props.history.push("/dashboard");
           } else {
             notification.error({

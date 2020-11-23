@@ -15,12 +15,13 @@ import {
 import CIcon from "@coreui/icons-react";
 
 // sidebar nav config
-import navigation from "./_nav";
+import navigation, { getNavBar } from "./_nav";
 
 const TheSidebar = () => {
   const dispatch = useDispatch();
   const show = useSelector((state) => state.sidebarShow);
-
+  const role = window.localStorage.getItem("@role");
+  const isAdmin = role === "ROLE_ADMIN";
   return (
     <CSidebar
       show={show}
@@ -45,7 +46,7 @@ const TheSidebar = () => {
       </CSidebarBrand>
       <CSidebarNav>
         <CCreateElement
-          items={navigation}
+          items={getNavBar(isAdmin)}
           components={{
             CSidebarNavDivider,
             CSidebarNavDropdown,
