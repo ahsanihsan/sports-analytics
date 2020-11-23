@@ -27,11 +27,11 @@ export default [
     name: "Team Scores",
     to: "/score-of-teams",
   },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Batsman Gets Bowled",
-    to: "/batsman-gets-bowled",
-  },
+  // {
+  //   _tag: "CSidebarNavItem",
+  //   name: "Batsman Gets Bowled",
+  //   to: "/batsman-gets-bowled",
+  // },
   {
     _tag: "CSidebarNavItem",
     name: "Batsman Scores",
@@ -173,12 +173,12 @@ export default [
   //     },
   //   ],
   // },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Charts",
-    to: "/charts",
-    // icon: "cil-chart-pie",
-  },
+  // {
+  //   _tag: "CSidebarNavItem",
+  //   name: "Charts",
+  //   to: "/charts",
+  //   // icon: "cil-chart-pie",
+  // },
   // {
   //   _tag: "CSidebarNavDropdown",
   //   name: "Icons",

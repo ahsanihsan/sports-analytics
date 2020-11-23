@@ -53,8 +53,13 @@ const TheHeader = (props) => {
         className="ml-3 d-md-down-none"
         onClick={toggleSidebar}
       />
-      <CHeaderBrand className="mx-auto d-lg-none" to="/">
-        <CIcon name="logo" height="48" alt="Logo" />
+      <CHeaderBrand className="mx-auto d-lg-none mt-3" to="/">
+        {/* <CIcon name="logo" height="48" alt="Logo" /> */}
+        {/* <img
+          src={require("../assets/icons/logo.png")}
+          style={{ width: 50, height: 50 }}
+        /> */}
+        <p style={{ textAlign: "center", fontSize: 20 }}>Sports Analytics</p>
       </CHeaderBrand>
 
       <CHeaderNav className="d-md-down-none mr-auto">

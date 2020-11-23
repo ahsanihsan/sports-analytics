@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Card, Col, notification, Row, Select, Spin } from "antd";
+import { Button, Card, Col, notification, Form, Row, Select, Spin } from "antd";
 import {
   cityAndVenue,
   MatchTypes,
@@ -9,6 +9,8 @@ import {
 import constants from "../../helpers/constants";
 import { post } from "../../helpers/request";
 import { CChartBar } from "@coreui/react-chartjs";
+import { isMobile } from "react-device-detect";
+
 export default class RunRate extends Component {
   constructor(props) {
     super(props);
@@ -44,12 +46,17 @@ export default class RunRate extends Component {
 
   render() {
     return (
-      <div>
-        <Row gutter={10}>
-          <Col span={9}>
-            <Card title="Team Data" style={{ width: "100%", borderRadius: 10 }}>
-              <div>
-                <label>Batting Team</label>
+      <Row gutter={10}>
+        <Col xxl={9} xl={9} md={9} sm={24} xs={24}>
+          <Card title="Team Data" style={{ width: "100%", borderRadius: 10 }}>
+            <Form name="basic" onFinish={() => this.handleSubmit()}>
+              <label>Batting Team</label>
+              <Form.Item
+                name="batting_team"
+                rules={[
+                  { required: true, message: "Please select batting team!" },
+                ]}
+              >
                 <Select
                   onChange={(batting_team) => this.setState({ batting_team })}
                   placeholder="Select Batting Team"
@@ -60,9 +67,14 @@ export default class RunRate extends Component {
                       return <Select.Option value={item}>{item}</Select.Option>;
                   })}
                 </Select>
-              </div>
-              <div style={{ marginTop: 10 }}>
-                <label>Bowling Team</label>
+              </Form.Item>
+              <label>Bowling Team</label>
+              <Form.Item
+                name="bowling_team"
+                rules={[
+                  { required: true, message: "Please select bowling team!" },
+                ]}
+              >
                 <Select
                   onChange={(bowling_team) => this.setState({ bowling_team })}
                   placeholder="Select Bowling Team"
@@ -73,9 +85,12 @@ export default class RunRate extends Component {
                       return <Select.Option value={item}>{item}</Select.Option>;
                   })}
                 </Select>
-              </div>
-              <div style={{ marginTop: 10 }}>
-                <label>Month</label>
+              </Form.Item>
+              <label>Month</label>
+              <Form.Item
+                name="month"
+                rules={[{ required: true, message: "Please select a month!" }]}
+              >
                 <Select
                   onChange={(month) => this.setState({ month })}
                   placeholder="Select Month"
@@ -85,9 +100,14 @@ export default class RunRate extends Component {
                     return <Select.Option value={item}>{item}</Select.Option>;
                   })}
                 </Select>
-              </div>
-              <div style={{ marginTop: 10 }}>
-                <label>Match Type</label>
+              </Form.Item>
+              <label>Match Type</label>
+              <Form.Item
+                name="match_type"
+                rules={[
+                  { required: true, message: "Please select match type!" },
+                ]}
+              >
                 <Select
                   onChange={(match_type) => this.setState({ match_type })}
                   placeholder="Select Match Type"
@@ -97,9 +117,12 @@ export default class RunRate extends Component {
                     return <Select.Option value={item}>{item}</Select.Option>;
                   })}
                 </Select>
-              </div>
-              <div style={{ marginTop: 10 }}>
-                <label>City</label>
+              </Form.Item>
+              <label>City</label>
+              <Form.Item
+                name="city"
+                rules={[{ required: true, message: "Please select city!" }]}
+              >
                 <Select
                   value={this.state.city}
                   onChange={(city) => this.setState({ city })}
@@ -114,47 +137,54 @@ export default class RunRate extends Component {
                     );
                   })}
                 </Select>
-              </div>
+              </Form.Item>
               <Button
                 type="primary"
                 style={{ width: "100%", marginTop: 20 }}
                 loading={this.state.isLoading}
-                onClick={() => this.handleSubmit()}
+                htmlType="submit"
               >
                 Predict
               </Button>
-            </Card>
-          </Col>
-          <Col span={15}>
-            <Card title="Run Rate" style={{ width: "100%", borderRadius: 10 }}>
-              {this.state.isLoading ? (
-                <Spin />
-              ) : this.state.predicted ? (
-                <div>
-                  <CChartBar
-                    type="bar"
-                    datasets={[
-                      {
-                        label: "Run Rate",
-                        backgroundColor: "#f87979",
-                        data: this.state.runRate,
-                      },
-                    ]}
-                    labels={["10", "20", "30", "40", "50"]}
-                    options={{
-                      tooltips: {
-                        enabled: true,
-                      },
-                    }}
-                  />
-                </div>
-              ) : (
-                <div>Please select values to display run rate.</div>
-              )}
-            </Card>
-          </Col>
-        </Row>
-      </div>
+            </Form>
+          </Card>
+        </Col>
+        <Col
+          xxl={15}
+          xl={15}
+          md={15}
+          sm={24}
+          xs={24}
+          style={{ marginTop: isMobile ? 20 : 0 }}
+        >
+          <Card title="Run Rate" style={{ width: "100%", borderRadius: 10 }}>
+            {this.state.isLoading ? (
+              <Spin />
+            ) : this.state.predicted ? (
+              <div>
+                <CChartBar
+                  type="bar"
+                  datasets={[
+                    {
+                      label: "Run Rate",
+                      backgroundColor: "#f87979",
+                      data: this.state.runRate,
+                    },
+                  ]}
+                  labels={["10", "20", "30", "40", "50"]}
+                  options={{
+                    tooltips: {
+                      enabled: true,
+                    },
+                  }}
+                />
+              </div>
+            ) : (
+              <div>Please select values to display run rate.</div>
+            )}
+          </Card>
+        </Col>
+      </Row>
     );
   }
 }

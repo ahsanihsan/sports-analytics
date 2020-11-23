@@ -9,6 +9,8 @@ import ChartLineSimple from "../charts/ChartLineSimple";
 import { CChartBar } from "@coreui/react-chartjs";
 import "./CustonCSS.css";
 
+import { isMobile } from "react-device-detect";
+
 export default class WhoWillWin extends Component {
   constructor(props) {
     super(props);
@@ -115,11 +117,13 @@ export default class WhoWillWin extends Component {
       },
       {
         title: "Team A",
+        fixed: "left",
         dataIndex: "team_a",
         key: "team_a",
       },
       {
         title: "Team B",
+        fixed: "left",
         dataIndex: "team_b",
         key: "team_b",
       },
@@ -168,7 +172,7 @@ export default class WhoWillWin extends Component {
     return (
       <div>
         <Row gutter={10}>
-          <Col span={9}>
+          <Col xxl={9} xl={9} md={9} sm={24} xs={24}>
             <Card title="Team Data" style={{ width: "100%", borderRadius: 10 }}>
               <Form name="basic" onFinish={() => this.handleSubmit()}>
                 <label>Team A</label>
@@ -356,7 +360,14 @@ export default class WhoWillWin extends Component {
               </Form>
             </Card>
           </Col>
-          <Col span={15}>
+          <Col
+            xxl={15}
+            xl={15}
+            md={15}
+            sm={24}
+            xs={24}
+            style={{ marginTop: isMobile ? 20 : 0 }}
+          >
             <Card
               title="Winner Team Prediction"
               style={{ width: "100%", borderRadius: 10 }}
@@ -430,6 +441,7 @@ export default class WhoWillWin extends Component {
         </Row>
         <Card
           title="History"
+          scroll={{ x: 1500 }}
           style={{
             width: "100%",
             borderRadius: 10,

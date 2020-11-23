@@ -1,19 +1,11 @@
 import React, { Component } from "react";
-import {
-  Button,
-  Card,
-  Col,
-  notification,
-  Row,
-  Select,
-  Spin,
-  Table,
-} from "antd";
+import { Button, Card, Col, Form, Row, Select, Spin, Table } from "antd";
 import { Players } from "../../helpers/Players";
 import { cityAndVenue, MatchTypes, Months, Teams } from "../../helpers/Teams";
 import constants from "../../helpers/constants";
 import { post } from "../../helpers/request";
 import { CChartLine } from "@coreui/react-chartjs";
+import { isMobile } from "react-device-detect";
 
 export default class BatsmanScores extends Component {
   constructor(props) {
@@ -54,9 +46,6 @@ export default class BatsmanScores extends Component {
         venue,
       }
     );
-    console.log("**********");
-    console.log(batsmanScores);
-    console.log("**********");
 
     if (batsmanScores) {
       this.setState({
@@ -177,116 +166,147 @@ export default class BatsmanScores extends Component {
     return (
       <div>
         <Row gutter={10}>
-          <Col span={9}>
+          <Col xxl={9} xl={9} md={9} sm={24} xs={24}>
             <Card title="Team Data" style={{ width: "100%", borderRadius: 10 }}>
-              <div>
-                <label>Select Batting Team</label>
-                <Select
-                  value={this.state.bat_team}
-                  onChange={(bat_team) => this.setState({ bat_team })}
-                  placeholder="Select Batting Team"
-                  style={{ width: "100%", borderRadius: 10, marginTop: 5 }}
+              <Form name="basic" onFinish={() => this.handleSubmit()}>
+                <label>Batting Team</label>
+                <Form.Item
+                  name="batting_team"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select a batting team!",
+                    },
+                  ]}
                 >
-                  {this.renderTeams()}
-                </Select>
-              </div>
-              <div style={{ marginTop: 10 }}>
-                <label>Select Batsman</label>
-                <Select
-                  value={this.state.batsman}
-                  onChange={(batsman) => this.setState({ batsman })}
-                  placeholder="Select Batsman"
-                  style={{ width: "100%", borderRadius: 10, marginTop: 5 }}
-                >
-                  {this.renderBatsmen()}
-                </Select>
-              </div>
-              <div style={{ marginTop: 10 }}>
-                <label>Select Bowling Team</label>
-                <Select
-                  value={this.state.bowling_team}
-                  onChange={(bowling_team) => this.setState({ bowling_team })}
-                  placeholder="Select Bowling Team"
-                  style={{ width: "100%", borderRadius: 10, marginTop: 5 }}
-                >
-                  {this.renderTeams()}
-                </Select>
-              </div>
-              {/* <div style={{ marginTop: 10 }}>
-                <label>Select Bowler</label>
-                <Select
-                  value={this.state.bowler}
-                  onChange={(bowler) => this.setState({ bowler })}
-                  placeholder="Select Bowling Team"
-                  style={{ width: "100%", borderRadius: 10, marginTop: 5 }}
-                >
-                  {this.renderBowler()}
-                </Select>
-              </div> */}
-              <div style={{ marginTop: 10 }}>
-                <label>Month</label>
-                <Select
-                  value={this.state.month}
-                  onChange={(month) => this.setState({ month })}
-                  placeholder="Select Month"
-                  style={{ width: "100%", borderRadius: 10, marginTop: 5 }}
-                >
-                  {Months.map((item) => {
-                    return <Select.Option value={item}>{item}</Select.Option>;
-                  })}
-                </Select>
-              </div>
-              <div style={{ marginTop: 10 }}>
-                <label>Match Type</label>
-                <Select
-                  value={this.state.match_type}
-                  onChange={(match_type) => this.setState({ match_type })}
-                  placeholder="Select Match Type"
-                  style={{ width: "100%", borderRadius: 10, marginTop: 5 }}
-                >
-                  {MatchTypes.map((item) => {
-                    return <Select.Option value={item}>{item}</Select.Option>;
-                  })}
-                </Select>
-              </div>
-              <div style={{ marginTop: 10 }}>
-                <label>City</label>
-                <Select
-                  value={this.state.city}
-                  onChange={(city) => this.setState({ city })}
-                  placeholder="Select City"
-                  style={{ width: "100%", borderRadius: 10, marginTop: 5 }}
-                >
-                  {cityAndVenue.map((item) => {
-                    return (
-                      <Select.Option value={item.city}>
-                        {item.city}
-                      </Select.Option>
-                    );
-                  })}
-                </Select>
-              </div>
-              {this.state.city ? (
-                <div style={{ marginTop: 10 }}>
-                  <label>Venue</label>
                   <Select
-                    value={this.state.venue}
-                    onChange={(venue) => this.setState({ venue })}
-                    placeholder="Select Venue"
+                    value={this.state.bat_team}
+                    onChange={(bat_team) => this.setState({ bat_team })}
+                    placeholder="Select Batting Team"
                     style={{ width: "100%", borderRadius: 10, marginTop: 5 }}
                   >
-                    {this.mapVenue(this.state.city)}
+                    {this.renderTeams()}
                   </Select>
-                </div>
-              ) : undefined}
-              <Button
-                type="primary"
-                style={{ width: "100%", marginTop: 20 }}
-                loading={this.state.isLoading}
-                onClick={() => this.handleSubmit()}
-              >
-                Predict
-              </Button>
+                </Form.Item>
+                {this.state.bat_team ? (
+                  <>
+                    <label>Select Batsman</label>
+                    <Form.Item
+                      name="batsman"
+                      rules={[
+                        { required: true, message: "Please select a batsman!" },
+                      ]}
+                    >
+                      <Select
+                        value={this.state.batsman}
+                        onChange={(batsman) => this.setState({ batsman })}
+                        placeholder="Select Batsman"
+                        style={{
+                          width: "100%",
+                          borderRadius: 10,
+                          marginTop: 5,
+                        }}
+                      >
+                        {this.renderBatsmen()}
+                      </Select>
+                    </Form.Item>
+                  </>
+                ) : undefined}
+                <label>Bowling Team</label>
+                <Form.Item
+                  name="bowling_team"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select a bowling team!",
+                    },
+                  ]}
+                >
+                  <Select
+                    value={this.state.bowling_team}
+                    onChange={(bowling_team) => this.setState({ bowling_team })}
+                    placeholder="Select Bowling Team"
+                    style={{ width: "100%", borderRadius: 10, marginTop: 5 }}
+                  >
+                    {this.renderTeams()}
+                  </Select>
+                </Form.Item>
+                <label>Month</label>
+                <Form.Item
+                  name="month"
+                  rules={[
+                    { required: true, message: "Please select a month!" },
+                  ]}
+                >
+                  <Select
+                    onChange={(month) => this.setState({ month })}
+                    placeholder="Select Month"
+                    style={{ width: "100%", borderRadius: 10, marginTop: 5 }}
+                  >
+                    {Months.map((item) => {
+                      return <Select.Option value={item}>{item}</Select.Option>;
+                    })}
+                  </Select>
+                </Form.Item>
+                <label>Match Type</label>
+                <Form.Item
+                  name="match_type"
+                  rules={[
+                    { required: true, message: "Please select match type!" },
+                  ]}
+                >
+                  <Select
+                    onChange={(match_type) => this.setState({ match_type })}
+                    placeholder="Select Match Type"
+                    style={{ width: "100%", borderRadius: 10, marginTop: 5 }}
+                  >
+                    {MatchTypes.map((item) => {
+                      return <Select.Option value={item}>{item}</Select.Option>;
+                    })}
+                  </Select>
+                </Form.Item>
+                <label>City</label>
+                <Form.Item
+                  name="city"
+                  rules={[{ required: true, message: "Please select city!" }]}
+                >
+                  <Select
+                    value={this.state.city}
+                    onChange={(city) => this.setState({ city })}
+                    placeholder="Select City"
+                    style={{ width: "100%", borderRadius: 10, marginTop: 5 }}
+                  >
+                    {cityAndVenue.map((item) => {
+                      return (
+                        <Select.Option value={item.city}>
+                          {item.city}
+                        </Select.Option>
+                      );
+                    })}
+                  </Select>
+                </Form.Item>
+                {this.state.city ? (
+                  <>
+                    <label>Venue</label>
+                    <Select
+                      value={this.state.venue}
+                      onChange={(venue) => this.setState({ venue })}
+                      placeholder="Select Venue"
+                      style={{ width: "100%", borderRadius: 10, marginTop: 5 }}
+                    >
+                      {this.mapVenue(this.state.city)}
+                    </Select>
+                  </>
+                ) : undefined}
+                <Button
+                  type="primary"
+                  style={{ width: "100%", marginTop: 20 }}
+                  loading={this.state.isLoading}
+                  onClick={() => this.handleSubmit()}
+                >
+                  Predict
+                </Button>
+              </Form>
             </Card>
           </Col>
           <Col span={15}>
