@@ -425,7 +425,11 @@ export default class WhoWillWin extends Component {
                         data: this.state.runRate.prediction,
                       },
                     ]}
-                    labels={["10", "20", "30", "40", "50"]}
+                    labels={
+                      this.state.match_type === "ODI"
+                        ? ["10", "20", "30", "40", "50"]
+                        : ["10", "20"]
+                    }
                     options={{
                       tooltips: {
                         enabled: true,

@@ -14,14 +14,14 @@ export default class TeamScores extends Component {
     super(props);
     this.state = {
       isLoading: false,
-      team_a: "Pakistan",
-      team_b: "India",
-      month: "February",
-      match_type: "ODI",
-      city: "Karachi",
-      toss_won: "Pakistan",
-      toss_decision: "bat",
-      venue: "National Stadium",
+      team_a: "",
+      team_b: "",
+      month: "",
+      match_type: "",
+      city: "",
+      toss_won: "",
+      toss_decision: "",
+      venue: "",
     };
   }
 
@@ -448,7 +448,11 @@ export default class TeamScores extends Component {
                         enabled: true,
                       },
                     }}
-                    labels={["10", "20", "30", "40", "50"]}
+                    labels={
+                      this.state.match_type === "ODI"
+                        ? ["10", "20", "30", "40", "50"]
+                        : ["10", "20"]
+                    }
                   />
                 </div>
               ) : (
