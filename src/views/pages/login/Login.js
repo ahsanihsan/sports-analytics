@@ -26,8 +26,8 @@ class Login extends Component {
     super(props);
     this.state = {
       isLoading: false,
-      email: "ahsan.ihsan@outlook.com",
-      password: "ahsan11343",
+      email: "",
+      password: "",
     };
   }
   handleSubmit = () => {

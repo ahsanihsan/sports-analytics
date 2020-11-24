@@ -302,7 +302,7 @@ export default class BatsmanScores extends Component {
                   type="primary"
                   style={{ width: "100%", marginTop: 20 }}
                   loading={this.state.isLoading}
-                  onClick={() => this.handleSubmit()}
+                  htmlType="submit"
                 >
                   Predict
                 </Button>
@@ -311,7 +311,7 @@ export default class BatsmanScores extends Component {
           </Col>
           <Col span={15}>
             <Card
-              title="Winner Team Prediction"
+              title="Batsman Score"
               style={{ width: "100%", borderRadius: 10 }}
             >
               {this.state.isLoading ? (

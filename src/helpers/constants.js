@@ -1,6 +1,7 @@
 export default {
   URL: {
-    MAIN_URL: "http://192.168.18.2:8080/",
+    // MAIN_URL: "http://192.168.18.2:8080/",
+    MAIN_URL: "http://29c9dbd57d62.ngrok.io/",
     // MAIN_URL: "https://sports-analytics-fyp.herokuapp.com/",
     USER: {
       GET_ALL_USERS: "users/all",
