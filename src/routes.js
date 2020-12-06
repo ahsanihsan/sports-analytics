@@ -72,8 +72,8 @@ const routes = [
   // { path: "/", exact: true, name: "Home" },
   { path: "/dashboard", name: "Dashboard", component: Dashboard },
   {
-    path: "/who-will-win",
-    name: "Who Will Win",
+    path: "/odi",
+    name: "ODI Prediction",
     component: WhoWillWin,
     exact: true,
   },

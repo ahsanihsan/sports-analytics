@@ -1,5 +1,15 @@
 import React, { Component } from "react";
-import { Button, Card, Col, Form, Row, Select, Spin, Table } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Form,
+  InputNumber,
+  Row,
+  Select,
+  Spin,
+  Table,
+} from "antd";
 import { cityAndVenue, MatchTypes, Months, Teams } from "../../helpers/Teams";
 import constants from "../../helpers/constants";
 import { post } from "../../helpers/request";
@@ -35,77 +45,85 @@ export default class WhoWillWin extends Component {
     };
   }
 
-  handleSubmit = async () => {
-    this.setState({ isLoading: true });
-    const {
-      team_a,
-      team_b,
-      city,
-      month,
-      match_type,
-      toss_decision,
-      venue,
-      toss_won,
-    } = this.state;
-    let whoWillWin = await post(constants.URL.PREDICTION.WHO_WILL_WIN, {
-      team_a,
-      team_b,
-      city,
-      month,
-      match_type,
-      toss_decision,
-      venue,
-      toss_won,
-    });
-
-    let runRate = await post(constants.URL.PREDICTION.RUN_RATE, {
-      match_type,
-      batting_team:
-        toss_won === team_a && toss_decision === "bat" ? team_a : team_b,
-      bowling_team:
-        toss_won === team_a && toss_decision === "field" ? team_a : team_b,
-      city,
-      month,
-    });
-
-    if (whoWillWin && runRate) {
-      let previousMatches = whoWillWin.data.data;
-      let matchHistory = [];
-      previousMatches.map((item) => {
-        matchHistory.push(item);
-      });
-      let totalScore = 0;
-      let runRateRound = [];
-      runRate.data.prediction.map((item) => {
-        runRateRound.push(Math.round(item));
-        const perTenOvers = item * 10;
-        totalScore += perTenOvers;
-      });
-      this.setState({
-        whoWillWin: whoWillWin.data,
-        runRate: runRate.data,
-        totalScore: Math.round(totalScore),
-        matchHistory,
-        isLoading: false,
-        predicted: true,
-      });
-    } else {
-      this.setState({ error: true, isLoading: false });
-    }
+  handleSubmit = async (values) => {
+    console.log("***** ALL THE VALUES ******");
+    console.log(values);
+    console.log("***** ALL THE VALUES ******");
+    // this.setState({ isLoading: true });
+    // const {
+    //   team_a,
+    //   team_b,
+    //   city,
+    //   month,
+    //   match_type,
+    //   toss_decision,
+    //   venue,
+    //   toss_won,
+    // } = this.state;
+    // let whoWillWin = await post(constants.URL.PREDICTION.WHO_WILL_WIN, {
+    //   team_a,
+    //   team_b,
+    //   city,
+    //   month,
+    //   match_type,
+    //   toss_decision,
+    //   venue,
+    //   toss_won,
+    // });
+    // let runRate = await post(constants.URL.PREDICTION.RUN_RATE, {
+    //   match_type,
+    //   batting_team:
+    //     toss_won === team_a && toss_decision === "bat" ? team_a : team_b,
+    //   bowling_team:
+    //     toss_won === team_a && toss_decision === "field" ? team_a : team_b,
+    //   city,
+    //   month,
+    // });
+    // if (whoWillWin && runRate) {
+    //   let previousMatches = whoWillWin.data.data;
+    //   let matchHistory = [];
+    //   previousMatches.map((item) => {
+    //     matchHistory.push(item);
+    //   });
+    //   let totalScore = 0;
+    //   let runRateRound = [];
+    //   runRate.data.prediction.map((item) => {
+    //     runRateRound.push(Math.round(item));
+    //     const perTenOvers = item * 10;
+    //     totalScore += perTenOvers;
+    //   });
+    //   this.setState({
+    //     whoWillWin: whoWillWin.data,
+    //     runRate: runRate.data,
+    //     totalScore: Math.round(totalScore),
+    //     matchHistory,
+    //     isLoading: false,
+    //     predicted: true,
+    //   });
+    // } else {
+    //   this.setState({ error: true, isLoading: false });
+    // }
   };
 
-  mapVenue = (city) => {
+  mapVenue = () => {
     let venue = [];
     cityAndVenue.map((item) => {
-      if (item.city === city) {
-        item.venue.map((venueCity) => {
-          venue.push(
-            <Select.Option value={venueCity}>{venueCity}</Select.Option>
-          );
-        });
-      }
+      item.venue.map((venueCity) => {
+        venue.push(
+          <Select.Option value={venueCity}>{venueCity}</Select.Option>
+        );
+      });
     });
     return venue;
+  };
+
+  mapTeams = (team) => {
+    let content = [];
+    Teams.map((item) => {
+      if (item !== team)
+        content.push(<Select.Option value={item}>{item}</Select.Option>);
+    });
+    return content;
   };
 
   render() {
@@ -174,179 +192,287 @@ export default class WhoWillWin extends Component {
         <Row gutter={10}>
           <Col xxl={9} xl={9} md={9} sm={24} xs={24}>
             <Card title="Team Data" style={{ width: "100%", borderRadius: 10 }}>
-              <Form name="basic" onFinish={() => this.handleSubmit()}>
-                <label>Team A</label>
-                <Form.Item
-                  name="team_a"
-                  rules={[{ required: true, message: "Please select team A!" }]}
-                >
-                  <Select
-                    value={this.state.team_a}
-                    onChange={(team_a) => this.setState({ team_a })}
-                    placeholder="Select Team A"
-                    style={{ width: "100%", borderRadius: 10, marginTop: 5 }}
-                  >
-                    <Select.Option value="Pakistan">Pakistan</Select.Option>
-                  </Select>
-                </Form.Item>
-                <label>Team B</label>
-                <Form.Item
-                  name="team_b"
-                  rules={[{ required: true, message: "Please select team B!" }]}
-                >
-                  <Select
-                    value={this.state.team_b}
-                    onChange={(team_b) => this.setState({ team_b })}
-                    placeholder="Select Team B"
-                    style={{ width: "100%", borderRadius: 10, marginTop: 5 }}
-                  >
-                    {Teams.map((item) => {
-                      return <Select.Option value={item}>{item}</Select.Option>;
-                    })}
-                  </Select>
-                </Form.Item>
-                <label>Month</label>
-                <Form.Item
-                  name="month"
-                  rules={[
-                    { required: true, message: "Please select a month!" },
-                  ]}
-                >
-                  <Select
-                    value={this.state.month}
-                    onChange={(month) => this.setState({ month })}
-                    placeholder="Select Month"
-                    style={{ width: "100%", borderRadius: 10, marginTop: 5 }}
-                  >
-                    {Months.map((item) => {
-                      return <Select.Option value={item}>{item}</Select.Option>;
-                    })}
-                  </Select>
-                </Form.Item>
-                <label>Match Type</label>
-                <Form.Item
-                  name="match_type"
-                  rules={[
-                    { required: true, message: "Please select match type!" },
-                  ]}
-                >
-                  <Select
-                    value={this.state.match_type}
-                    onChange={(match_type) => this.setState({ match_type })}
-                    placeholder="Select Match Type"
-                    style={{ width: "100%", borderRadius: 10, marginTop: 5 }}
-                  >
-                    {MatchTypes.map((item) => {
-                      return <Select.Option value={item}>{item}</Select.Option>;
-                    })}
-                  </Select>
-                </Form.Item>
-                {this.state.team_a && this.state.team_b ? (
-                  <>
-                    <label>Toss Won</label>
+              <Form
+                name="basic"
+                onFinish={(values) => this.handleSubmit(values)}
+              >
+                <Row gutter={10}>
+                  <Col span={12}>
+                    <label>Team A</label>
                     <Form.Item
-                      name="toss_won"
+                      name="team_a"
                       rules={[
-                        {
-                          required: true,
-                          message: "Please select which team won the toss!",
-                        },
+                        { required: true, message: "Please select team A!" },
                       ]}
                     >
                       <Select
-                        value={this.state.toss_won}
-                        onChange={(toss_won) => this.setState({ toss_won })}
-                        placeholder="Select Toss Winning Team"
+                        value={this.state.team_a}
+                        onChange={(team_a) => this.setState({ team_a })}
+                        placeholder="Select Team A"
                         style={{
                           width: "100%",
                           borderRadius: 10,
-                          marginTop: 5,
                         }}
                       >
-                        <Select.Option value={this.state.team_a}>
-                          {this.state.team_a}
-                        </Select.Option>
-                        <Select.Option value={this.state.team_b}>
-                          {this.state.team_b}
-                        </Select.Option>
+                        {this.mapTeams(this.state.team_b)}
                       </Select>
                     </Form.Item>
-                  </>
-                ) : undefined}
-                <label>Toss Decision</label>
+                  </Col>
+                  <Col span={12}>
+                    <label>Team B</label>
+                    <Form.Item
+                      name="team_b"
+                      rules={[
+                        { required: true, message: "Please select team B!" },
+                      ]}
+                    >
+                      <Select
+                        value={this.state.team_b}
+                        onChange={(team_b) => this.setState({ team_b })}
+                        placeholder="Select Team B"
+                        style={{
+                          width: "100%",
+                        }}
+                      >
+                        {this.mapTeams(this.state.team_a)}
+                      </Select>
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <label>Venue</label>
                 <Form.Item
-                  name="toss_decision"
+                  name="venue"
                   rules={[
                     {
                       required: true,
-                      message: "Please select what toss decision was made!",
+                      message: "Please select venue!",
                     },
                   ]}
                 >
                   <Select
-                    value={this.state.toss_decision}
-                    onChange={(toss_decision) =>
-                      this.setState({ toss_decision })
-                    }
-                    placeholder="Select Toss Decision"
-                    style={{ width: "100%", borderRadius: 10, marginTop: 5 }}
+                    value={this.state.venue}
+                    onChange={(venue) => this.setState({ venue })}
+                    placeholder="Select Venue"
+                    style={{
+                      width: "100%",
+                    }}
                   >
-                    <Select.Option value="bat">Bat</Select.Option>
-                    <Select.Option value="field">Field</Select.Option>
+                    {this.mapVenue()}
                   </Select>
                 </Form.Item>
-                <label>City</label>
-                <Form.Item
-                  name="city"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please select a city!",
-                    },
-                  ]}
-                >
-                  <Select
-                    value={this.state.city}
-                    onChange={(city) => this.setState({ city })}
-                    placeholder="Select City"
-                    style={{ width: "100%", borderRadius: 10, marginTop: 5 }}
-                  >
-                    {cityAndVenue.map((item) => {
-                      return (
-                        <Select.Option value={item.city}>
-                          {item.city}
-                        </Select.Option>
-                      );
-                    })}
-                  </Select>
-                </Form.Item>
-                {this.state.city ? (
-                  <>
-                    <label>Venue</label>
+                <Row gutter={10}>
+                  <Col span={12}>
+                    <label>Overs</label>
                     <Form.Item
-                      name="venue"
+                      name="overs"
                       rules={[
                         {
                           required: true,
-                          message: "Please select venue!",
+                          message: "Please input total overs played till now!",
                         },
                       ]}
                     >
-                      <Select
-                        value={this.state.venue}
-                        onChange={(venue) => this.setState({ venue })}
-                        placeholder="Select Venue"
-                        style={{
-                          width: "100%",
-                          borderRadius: 10,
-                          marginTop: 5,
-                        }}
-                      >
-                        {this.mapVenue(this.state.city)}
-                      </Select>
+                      <InputNumber
+                        placeholder="Enter Overs (0 - 49)"
+                        onChange={(overs) => this.setState({ overs })}
+                        style={{ width: "100%", marginTop: 5 }}
+                        min={0}
+                        max={49}
+                      />
                     </Form.Item>
-                  </>
-                ) : undefined}
+                  </Col>
+                  <Col span={12}>
+                    <label>Balls</label>
+                    <Form.Item
+                      name="balls"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input balls of the current over!",
+                        },
+                      ]}
+                    >
+                      <InputNumber
+                        placeholder="Enter Balls (1 - 5)"
+                        onChange={(balls) => this.setState({ balls })}
+                        style={{ width: "100%", marginTop: 5 }}
+                        min={1}
+                        max={5}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={10}>
+                  <Col span={12}>
+                    <label>Runs Till Now</label>
+                    <Form.Item
+                      name="runs"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input runs made by team till now!",
+                        },
+                      ]}
+                    >
+                      <InputNumber
+                        placeholder="Enter Runs (0-500)"
+                        onChange={(runs) => this.setState({ runs })}
+                        style={{ width: "100%", marginTop: 5 }}
+                        min={0}
+                        max={500}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <label>Wickets Till Now</label>
+                    <Form.Item
+                      name="wickets"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input wickets taken till now!",
+                        },
+                      ]}
+                    >
+                      <InputNumber
+                        placeholder="Enter Wickets (0-9)"
+                        onChange={(wickets) => this.setState({ wickets })}
+                        style={{ width: "100%", marginTop: 5 }}
+                        min={0}
+                        max={9}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={10}>
+                  <Col span={12}>
+                    <label>Fours Till Now</label>
+                    <Form.Item
+                      name="fours_till_now"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input fours scored till now!",
+                        },
+                      ]}
+                    >
+                      <InputNumber
+                        placeholder="Enter Fours (0-100)"
+                        onChange={(fours) => this.setState({ fours })}
+                        style={{ width: "100%", marginTop: 5 }}
+                        min={0}
+                        max={100}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <label>Sixes Till Now</label>
+                    <Form.Item
+                      name="sixes_till_now"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input sixes scored till now!",
+                        },
+                      ]}
+                    >
+                      <InputNumber
+                        placeholder="Enter Fours (0-100)"
+                        onChange={(fours) => this.setState({ fours })}
+                        style={{ width: "100%", marginTop: 5 }}
+                        min={0}
+                        max={100}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={10}>
+                  <Col span={12}>
+                    <label>Runs Last 5 Overs</label>
+                    <Form.Item
+                      name="runs_last_5"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input runs scored in last 5 overs !",
+                        },
+                      ]}
+                    >
+                      <InputNumber
+                        placeholder="Runs in last 5 overs (0-100)"
+                        onChange={(fours) => this.setState({ fours })}
+                        style={{ width: "100%", marginTop: 5 }}
+                        min={0}
+                        max={200}
+                      />
+                    </Form.Item>
+                  </Col>
+                  {this.state.wickets ? (
+                    <Col span={12}>
+                      <label>Wickets Last 5 Overs</label>
+                      <Form.Item
+                        name="wickets_last_5"
+                        rules={[
+                          {
+                            required: true,
+                            message:
+                              "Please input wickets taken in last 5 overs !",
+                          },
+                        ]}
+                      >
+                        <InputNumber
+                          placeholder="Wickets in last 5 overs (0-9)"
+                          onChange={(fours) => this.setState({ fours })}
+                          style={{ width: "100%", marginTop: 5 }}
+                          min={0}
+                          max={this.state.wickets}
+                        />
+                      </Form.Item>
+                    </Col>
+                  ) : undefined}
+                </Row>
+                <Row gutter={10}>
+                  <Col span={12}>
+                    <label>Wide Balls Till Now</label>
+                    <Form.Item
+                      name="wide_balls_till_now"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input wide balls till now!",
+                        },
+                      ]}
+                    >
+                      <InputNumber
+                        placeholder="Wide balls till now (0-100)"
+                        onChange={(wideBalls) => this.setState({ wideBalls })}
+                        style={{ width: "100%", marginTop: 5 }}
+                        min={0}
+                        max={50}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <label>No Balls Till Now</label>
+                    <Form.Item
+                      name="no_balls_till_now"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input no balls till now!",
+                        },
+                      ]}
+                    >
+                      <InputNumber
+                        placeholder="No Balls Till now (0-9)"
+                        onChange={(noBalls) => this.setState({ noBalls })}
+                        style={{ width: "100%", marginTop: 5 }}
+                        min={0}
+                        max={50}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
                 <Form.Item>
                   <Button
                     type="primary"
