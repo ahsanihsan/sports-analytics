@@ -26,6 +26,7 @@ export const Teams = [
   "West Indies",
   "Zimbabwe",
 ];
+
 export const TeamsPakistan = [
   "Afghanistan",
   "Australia",
