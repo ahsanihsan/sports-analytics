@@ -96,6 +96,21 @@ export default class WhoWillWin extends Component {
     console.log(teamAPrediction);
     console.log(teamBPrediction);
     console.log("******* VALUES ******");
+    if (
+      teamAPrediction &&
+      teamBPrediction &&
+      teamAPrediction.data &&
+      teamBPrediction.data
+    ) {
+      this.setState({
+        teamAPrediction: teamAPrediction.data,
+        teamBPrediction: teamBPrediction.data,
+        isLoading: false,
+        predicted: true,
+      });
+    } else {
+      this.setState({ error: true, isLoading: false });
+    }
     // this.setState({ isLoading: false });
     // let runRate = await post(constants.URL.PREDICTION.RUN_RATE, {
     //   match_type,
@@ -125,7 +140,6 @@ export default class WhoWillWin extends Component {
     //     totalScore: Math.round(totalScore),
     //     matchHistory,
     //     isLoading: false,
-    //     predicted: true,
     //   });
     // } else {
     //   this.setState({ error: true, isLoading: false });
@@ -147,6 +161,15 @@ export default class WhoWillWin extends Component {
         content.push(<Select.Option value={item}>{item}</Select.Option>);
     });
     return content;
+  };
+
+  getWinner = () => {
+    const { teamAPrediction, teamBPrediction } = this.state;
+    if (teamAPrediction.predictions.total > teamBPrediction.predictions.total) {
+      return this.state.team_a;
+    } else {
+      return this.state.team_b;
+    }
   };
 
   render() {
@@ -210,12 +233,29 @@ export default class WhoWillWin extends Component {
       },
     ];
 
+    const { teamAPrediction, teamBPrediction } = this.state;
+
     return (
       <div>
         <Row gutter={10}>
           <Col xxl={9} xl={9} md={9} sm={24} xs={24}>
             <Card title="Team Data" style={{ width: "100%", borderRadius: 10 }}>
               <Form
+                // initialValues={{
+                //   venue: "Sharjah Cricket Stadium",
+                //   team_a: "Pakistan",
+                //   team_b: "India",
+                //   runs: 100,
+                //   wickets: 3,
+                //   overs: 5,
+                //   balls: 1,
+                //   runs_last_5: 10,
+                //   wickets_last_5: 0,
+                //   fours_till_now: 0,
+                //   sixes_till_now: 1,
+                //   no_balls_till_now: 0,
+                //   wide_balls_till_now: 0,
+                // }}
                 name="basic"
                 onFinish={(values) => this.handleSubmit(values)}
               >
@@ -524,16 +564,32 @@ export default class WhoWillWin extends Component {
               {this.state.isLoading ? (
                 <Spin />
               ) : this.state.predicted ? (
+                <div>{this.getWinner()} will win this match</div>
+              ) : (
+                <div>Please select values to continue.</div>
+              )}
+            </Card>
+            <Card
+              title="Winner Team Predicted Score"
+              style={{ width: "100%", borderRadius: 10, marginTop: 10 }}
+            >
+              {this.state.isLoading ? (
+                <Spin />
+              ) : this.state.predicted ? (
                 <div>
                   <Row gutter={10}>
                     <Col span={12}>
                       <CWidgetDropdown
-                        color="gradient-warning"
-                        header={this.state.whoWillWin.prediction}
-                        text="Winner Team"
+                        color={
+                          this.getWinner() === this.state.team_a
+                            ? "gradient-success"
+                            : "gradient-danger"
+                        }
+                        header={teamAPrediction.predictions.total}
+                        text={this.state.team_a + " Score"}
                         footerSlot={
                           <ChartLineSimple
-                            dataPoints={this.state.runRate.prediction}
+                            dataPoints={teamAPrediction.predictions.runrates}
                             className="mt-3"
                             style={{ height: "70px" }}
                             backgroundColor="rgba(255,255,255,.2)"
@@ -549,15 +605,23 @@ export default class WhoWillWin extends Component {
                     </Col>
                     <Col span={12}>
                       <CWidgetDropdown
-                        color="gradient-primary"
-                        header={this.state.totalScore}
-                        text="Team Total Score"
+                        color={
+                          this.getWinner() === this.state.team_b
+                            ? "gradient-success"
+                            : "gradient-danger"
+                        }
+                        header={teamBPrediction.predictions.total}
+                        text={this.state.team_b + " Score"}
                         footerSlot={
-                          <ChartBarSimple
-                            dataPoints={this.state.runRate.prediction}
-                            className="mt-3 mx-3"
+                          <ChartLineSimple
+                            dataPoints={teamBPrediction.predictions.runrates}
+                            className="mt-3"
                             style={{ height: "70px" }}
-                            backgroundColor="rgb(250, 250, 250, 0.5)"
+                            backgroundColor="rgba(255,255,255,.2)"
+                            options={{
+                              elements: { line: { borderWidth: 2.5 } },
+                            }}
+                            pointHoverBackgroundColor="warning"
                             label="Run Rate"
                             labels="runrate"
                           />
@@ -565,20 +629,46 @@ export default class WhoWillWin extends Component {
                       />
                     </Col>
                   </Row>
+                </div>
+              ) : (
+                <div>Please select values to continue.</div>
+              )}
+            </Card>
+            <Card
+              title="Run Rate Prediction"
+              style={{ width: "100%", borderRadius: 10, marginTop: 10 }}
+            >
+              {this.state.isLoading ? (
+                <Spin />
+              ) : this.state.predicted ? (
+                <div>
                   <CChartBar
                     type="bar"
                     datasets={[
                       {
-                        label: "Run Rate",
+                        label: "Run Rate " + this.state.team_a,
                         backgroundColor: "#f87979",
-                        data: this.state.runRate.prediction,
+                        data: teamAPrediction.predictions.runrates,
                       },
                     ]}
-                    labels={
-                      this.state.match_type === "ODI"
-                        ? ["10", "20", "30", "40", "50"]
-                        : ["10", "20"]
-                    }
+                    labels={["10", "20", "30", "40", "50"]}
+                    options={{
+                      tooltips: {
+                        enabled: true,
+                      },
+                    }}
+                  />
+                  <CChartBar
+                    style={{ marginTop: 20 }}
+                    type="bar"
+                    datasets={[
+                      {
+                        label: "Run Rate " + this.state.team_b,
+                        backgroundColor: "#f87979",
+                        data: teamBPrediction.predictions.runrates,
+                      },
+                    ]}
+                    labels={["10", "20", "30", "40", "50"]}
                     options={{
                       tooltips: {
                         enabled: true,
