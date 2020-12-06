@@ -17,6 +17,7 @@ export default {
       WHAT_SCORE_WILL_BATSMAN_MAKE: "prediction/what_score_batsman_makes",
       RUN_RATE: "prediction/run_rate",
       SCORE_OF_TEAMS: "prediction/score_of_teams",
+      PREDICT_MATCH: "prediction/predict_match",
     },
   },
 };

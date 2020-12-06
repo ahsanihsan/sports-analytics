@@ -52,30 +52,51 @@ export default class WhoWillWin extends Component {
   }
 
   handleSubmit = async (values) => {
-    console.log("***** ALL THE VALUES ******");
-    console.log(values);
-    console.log("***** ALL THE VALUES ******");
-    // this.setState({ isLoading: true });
-    // const {
-    //   team_a,
-    //   team_b,
-    //   city,
-    //   month,
-    //   match_type,
-    //   toss_decision,
-    //   venue,
-    //   toss_won,
-    // } = this.state;
-    // let whoWillWin = await post(constants.URL.PREDICTION.WHO_WILL_WIN, {
-    //   team_a,
-    //   team_b,
-    //   city,
-    //   month,
-    //   match_type,
-    //   toss_decision,
-    //   venue,
-    //   toss_won,
-    // });
+    const dataA = {
+      venue: values.venue,
+      bat_team: values.team_a,
+      bowl_team: values.team_b,
+      runs: values.runs,
+      wickets: values.wickets,
+      overs: parseFloat(values.overs + "." + values.balls),
+      runs_last_5: values.runs_last_5,
+      wickets_last_5: values.wickets_last_5,
+      fours_till_now: values.fours_till_now,
+      sixes_till_now: values.sixes_till_now,
+      no_balls_till_now: values.no_balls_till_now,
+      wide_balls_till_now: values.wide_balls_till_now,
+    };
+
+    const dataB = {
+      venue: values.venue,
+      bowl_team: values.team_a,
+      bat_team: values.team_b,
+      runs: values.runs,
+      wickets: values.wickets,
+      overs: parseFloat(values.overs + "." + values.balls),
+      runs_last_5: values.runs_last_5,
+      wickets_last_5: values.wickets_last_5,
+      fours_till_now: values.fours_till_now,
+      sixes_till_now: values.sixes_till_now,
+      no_balls_till_now: values.no_balls_till_now,
+      wide_balls_till_now: values.wide_balls_till_now,
+    };
+    this.setState({ isLoading: true });
+
+    let teamAPrediction = await post(
+      constants.URL.PREDICTION.PREDICT_MATCH,
+      dataA
+    );
+    let teamBPrediction = await post(
+      constants.URL.PREDICTION.PREDICT_MATCH,
+      dataB
+    );
+
+    console.log("******* VALUES ******");
+    console.log(teamAPrediction);
+    console.log(teamBPrediction);
+    console.log("******* VALUES ******");
+    // this.setState({ isLoading: false });
     // let runRate = await post(constants.URL.PREDICTION.RUN_RATE, {
     //   match_type,
     //   batting_team:
@@ -299,7 +320,7 @@ export default class WhoWillWin extends Component {
                         onChange={(balls) => this.setState({ balls })}
                         style={{ width: "100%", marginTop: 5 }}
                         min={1}
-                        max={5}
+                        max={6}
                       />
                     </Form.Item>
                   </Col>
