@@ -10,7 +10,13 @@ import {
   Spin,
   Table,
 } from "antd";
-import { cityAndVenue, MatchTypes, Months, Teams } from "../../helpers/Teams";
+import {
+  cityAndVenue,
+  MatchTypes,
+  Months,
+  Teams,
+  Venue,
+} from "../../helpers/Teams";
 import constants from "../../helpers/constants";
 import { post } from "../../helpers/request";
 import { CWidgetDropdown } from "@coreui/react";
@@ -107,12 +113,8 @@ export default class WhoWillWin extends Component {
 
   mapVenue = () => {
     let venue = [];
-    cityAndVenue.map((item) => {
-      item.venue.map((venueCity) => {
-        venue.push(
-          <Select.Option value={venueCity}>{venueCity}</Select.Option>
-        );
-      });
+    Venue.map((venueCity) => {
+      venue.push(<Select.Option value={venueCity}>{venueCity}</Select.Option>);
     });
     return venue;
   };
@@ -388,6 +390,48 @@ export default class WhoWillWin extends Component {
                 </Row>
                 <Row gutter={10}>
                   <Col span={12}>
+                    <label>Wide Balls Till Now</label>
+                    <Form.Item
+                      name="wide_balls_till_now"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input wide balls till now!",
+                        },
+                      ]}
+                    >
+                      <InputNumber
+                        placeholder="Wide balls till now (0-100)"
+                        onChange={(wideBalls) => this.setState({ wideBalls })}
+                        style={{ width: "100%", marginTop: 5 }}
+                        min={0}
+                        max={50}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <label>No Balls Till Now</label>
+                    <Form.Item
+                      name="no_balls_till_now"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input no balls till now!",
+                        },
+                      ]}
+                    >
+                      <InputNumber
+                        placeholder="No Balls Till now (0-9)"
+                        onChange={(noBalls) => this.setState({ noBalls })}
+                        style={{ width: "100%", marginTop: 5 }}
+                        min={0}
+                        max={50}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={10}>
+                  <Col span={12}>
                     <label>Runs Last 5 Overs</label>
                     <Form.Item
                       name="runs_last_5"
@@ -430,48 +474,6 @@ export default class WhoWillWin extends Component {
                       </Form.Item>
                     </Col>
                   ) : undefined}
-                </Row>
-                <Row gutter={10}>
-                  <Col span={12}>
-                    <label>Wide Balls Till Now</label>
-                    <Form.Item
-                      name="wide_balls_till_now"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please input wide balls till now!",
-                        },
-                      ]}
-                    >
-                      <InputNumber
-                        placeholder="Wide balls till now (0-100)"
-                        onChange={(wideBalls) => this.setState({ wideBalls })}
-                        style={{ width: "100%", marginTop: 5 }}
-                        min={0}
-                        max={50}
-                      />
-                    </Form.Item>
-                  </Col>
-                  <Col span={12}>
-                    <label>No Balls Till Now</label>
-                    <Form.Item
-                      name="no_balls_till_now"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please input no balls till now!",
-                        },
-                      ]}
-                    >
-                      <InputNumber
-                        placeholder="No Balls Till now (0-9)"
-                        onChange={(noBalls) => this.setState({ noBalls })}
-                        style={{ width: "100%", marginTop: 5 }}
-                        min={0}
-                        max={50}
-                      />
-                    </Form.Item>
-                  </Col>
                 </Row>
                 <Form.Item>
                   <Button
