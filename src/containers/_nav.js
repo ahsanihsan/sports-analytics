@@ -54,6 +54,12 @@ export const getNavBar = (isAdmin) => {
         to: "/odi",
         // icon: "cil-hand-peace",
       },
+      {
+        _tag: "CSidebarNavItem",
+        name: "T20",
+        to: "/t20",
+        // icon: "cil-hand-peace",
+      },
       // {
       //   _tag: "CSidebarNavItem",
       //   name: "Run Rate",
