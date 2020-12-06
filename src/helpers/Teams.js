@@ -1,7 +1,7 @@
 export const Teams = [
   "Afghanistan",
-  "Africa XI",
-  "Asia XI",
+  // "Africa XI",
+  // "Asia XI",
   "Australia",
   "Bangladesh",
   "Bermuda",
@@ -23,7 +23,7 @@ export const Teams = [
   "Sri Lanka",
   "United Arab Emirates",
   "United States of America",
-  "West Indies",
+  // "West Indies",
   "Zimbabwe",
 ];
 export const TeamsPakistan = [
