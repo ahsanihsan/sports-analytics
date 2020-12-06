@@ -26,7 +26,7 @@ import { CChartBar } from "@coreui/react-chartjs";
 import "./CustonCSS.css";
 
 import { isMobile } from "react-device-detect";
-import { getFlagImages } from "../../helpers/Flags";
+// import { getFlagImages } from "../../helpers/Flags";
 
 export default class WhoWillWin extends Component {
   constructor(props) {
@@ -564,7 +564,7 @@ export default class WhoWillWin extends Component {
                 <Spin />
               ) : this.state.predicted ? (
                 <div>
-                  <img src={getFlagImages(this.getWinner())} />
+                  {/* <img src={getFlagImages(this.getWinner())} /> */}
                   {this.getWinner()} will win this match
                 </div>
               ) : (

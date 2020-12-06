@@ -26,6 +26,7 @@ import { CChartBar } from "@coreui/react-chartjs";
 import "./CustonCSS.css";
 
 import { isMobile } from "react-device-detect";
+// import { getFlagImages } from "../../helpers/Flags";
 
 export default class T20 extends Component {
   constructor(props) {
@@ -52,27 +53,66 @@ export default class T20 extends Component {
   }
 
   handleSubmit = async (values) => {
-    // this.setState({ isLoading: true });
-    // const {
-    //   team_a,
-    //   team_b,
-    //   city,
-    //   month,
-    //   match_type,
-    //   toss_decision,
-    //   venue,
-    //   toss_won,
-    // } = this.state;
-    // let whoWillWin = await post(constants.URL.PREDICTION.WHO_WILL_WIN, {
-    //   team_a,
-    //   team_b,
-    //   city,
-    //   month,
-    //   match_type,
-    //   toss_decision,
-    //   venue,
-    //   toss_won,
-    // });
+    const dataA = {
+      venue: values.venue,
+      bat_team: values.team_a,
+      bowl_team: values.team_b,
+      runs: values.runs,
+      wickets: values.wickets,
+      overs: parseFloat(values.overs + "." + values.balls),
+      runs_last_5: values.runs_last_5,
+      wickets_last_5: values.wickets_last_5,
+      fours_till_now: values.fours_till_now,
+      sixes_till_now: values.sixes_till_now,
+      no_balls_till_now: values.no_balls_till_now,
+      wide_balls_till_now: values.wide_balls_till_now,
+    };
+
+    const dataB = {
+      venue: values.venue,
+      bowl_team: values.team_a,
+      bat_team: values.team_b,
+      runs: values.runs,
+      wickets: values.wickets,
+      overs: parseFloat(values.overs + "." + values.balls),
+      runs_last_5: values.runs_last_5,
+      wickets_last_5: values.wickets_last_5,
+      fours_till_now: values.fours_till_now,
+      sixes_till_now: values.sixes_till_now,
+      no_balls_till_now: values.no_balls_till_now,
+      wide_balls_till_now: values.wide_balls_till_now,
+    };
+    this.setState({ isLoading: true });
+
+    let teamAPrediction = await post(
+      constants.URL.PREDICTION.PREDICT_MATCH_T20,
+      dataA
+    );
+    let teamBPrediction = await post(
+      constants.URL.PREDICTION.PREDICT_MATCH_T20,
+      dataB
+    );
+
+    console.log("******* VALUES ******");
+    console.log(teamAPrediction);
+    console.log(teamBPrediction);
+    console.log("******* VALUES ******");
+    if (
+      teamAPrediction &&
+      teamBPrediction &&
+      teamAPrediction.data &&
+      teamBPrediction.data
+    ) {
+      this.setState({
+        teamAPrediction: teamAPrediction.data,
+        teamBPrediction: teamBPrediction.data,
+        isLoading: false,
+        predicted: true,
+      });
+    } else {
+      this.setState({ error: true, isLoading: false });
+    }
+    // this.setState({ isLoading: false });
     // let runRate = await post(constants.URL.PREDICTION.RUN_RATE, {
     //   match_type,
     //   batting_team:
@@ -101,7 +141,6 @@ export default class T20 extends Component {
     //     totalScore: Math.round(totalScore),
     //     matchHistory,
     //     isLoading: false,
-    //     predicted: true,
     //   });
     // } else {
     //   this.setState({ error: true, isLoading: false });
@@ -123,6 +162,15 @@ export default class T20 extends Component {
         content.push(<Select.Option value={item}>{item}</Select.Option>);
     });
     return content;
+  };
+
+  getWinner = () => {
+    const { teamAPrediction, teamBPrediction } = this.state;
+    if (teamAPrediction.predictions.total > teamBPrediction.predictions.total) {
+      return this.state.team_a;
+    } else {
+      return this.state.team_b;
+    }
   };
 
   render() {
@@ -186,12 +234,29 @@ export default class T20 extends Component {
       },
     ];
 
+    const { teamAPrediction, teamBPrediction } = this.state;
+
     return (
       <div>
         <Row gutter={10}>
           <Col xxl={9} xl={9} md={9} sm={24} xs={24}>
             <Card title="Team Data" style={{ width: "100%", borderRadius: 10 }}>
               <Form
+                // initialValues={{
+                //   venue: "Sharjah Cricket Stadium",
+                //   team_a: "Pakistan",
+                //   team_b: "India",
+                //   runs: 100,
+                //   wickets: 3,
+                //   overs: 5,
+                //   balls: 1,
+                //   runs_last_5: 10,
+                //   wickets_last_5: 0,
+                //   fours_till_now: 0,
+                //   sixes_till_now: 1,
+                //   no_balls_till_now: 0,
+                //   wide_balls_till_now: 0,
+                // }}
                 name="basic"
                 onFinish={(values) => this.handleSubmit(values)}
               >
@@ -292,7 +357,7 @@ export default class T20 extends Component {
                       ]}
                     >
                       <InputNumber
-                        placeholder="Enter Balls (1 - 6)"
+                        placeholder="Enter Balls (1 - 5)"
                         onChange={(balls) => this.setState({ balls })}
                         style={{ width: "100%", marginTop: 5 }}
                         min={1}
@@ -448,29 +513,27 @@ export default class T20 extends Component {
                       />
                     </Form.Item>
                   </Col>
-                  {this.state.wickets ? (
-                    <Col span={12}>
-                      <label>Wickets Last 5 Overs</label>
-                      <Form.Item
-                        name="wickets_last_5"
-                        rules={[
-                          {
-                            required: true,
-                            message:
-                              "Please input wickets taken in last 5 overs !",
-                          },
-                        ]}
-                      >
-                        <InputNumber
-                          placeholder="Wickets in last 5 overs (0-9)"
-                          onChange={(fours) => this.setState({ fours })}
-                          style={{ width: "100%", marginTop: 5 }}
-                          min={0}
-                          max={this.state.wickets}
-                        />
-                      </Form.Item>
-                    </Col>
-                  ) : undefined}
+                  <Col span={12}>
+                    <label>Wickets Last 5 Overs</label>
+                    <Form.Item
+                      name="wickets_last_5"
+                      rules={[
+                        {
+                          required: true,
+                          message:
+                            "Please input wickets taken in last 5 overs !",
+                        },
+                      ]}
+                    >
+                      <InputNumber
+                        placeholder="Wickets in last 5 overs (0-9)"
+                        onChange={(fours) => this.setState({ fours })}
+                        style={{ width: "100%", marginTop: 5 }}
+                        min={0}
+                        max={this.state.wickets}
+                      />
+                    </Form.Item>
+                  </Col>
                 </Row>
                 <Form.Item>
                   <Button
@@ -501,15 +564,34 @@ export default class T20 extends Component {
                 <Spin />
               ) : this.state.predicted ? (
                 <div>
+                  {/* <img src={getFlagImages(this.getWinner())} /> */}
+                  {this.getWinner()} will win this match
+                </div>
+              ) : (
+                <div>Please select values to continue.</div>
+              )}
+            </Card>
+            <Card
+              title="Winner Team Predicted Score"
+              style={{ width: "100%", borderRadius: 10, marginTop: 10 }}
+            >
+              {this.state.isLoading ? (
+                <Spin />
+              ) : this.state.predicted ? (
+                <div>
                   <Row gutter={10}>
                     <Col span={12}>
                       <CWidgetDropdown
-                        color="gradient-warning"
-                        header={this.state.whoWillWin.prediction}
-                        text="Winner Team"
+                        color={
+                          this.getWinner() === this.state.team_a
+                            ? "gradient-success"
+                            : "gradient-danger"
+                        }
+                        header={teamAPrediction.predictions.total}
+                        text={this.state.team_a + " Score"}
                         footerSlot={
                           <ChartLineSimple
-                            dataPoints={this.state.runRate.prediction}
+                            dataPoints={teamAPrediction.predictions.runrates}
                             className="mt-3"
                             style={{ height: "70px" }}
                             backgroundColor="rgba(255,255,255,.2)"
@@ -525,15 +607,23 @@ export default class T20 extends Component {
                     </Col>
                     <Col span={12}>
                       <CWidgetDropdown
-                        color="gradient-primary"
-                        header={this.state.totalScore}
-                        text="Team Total Score"
+                        color={
+                          this.getWinner() === this.state.team_b
+                            ? "gradient-success"
+                            : "gradient-danger"
+                        }
+                        header={teamBPrediction.predictions.total}
+                        text={this.state.team_b + " Score"}
                         footerSlot={
-                          <ChartBarSimple
-                            dataPoints={this.state.runRate.prediction}
-                            className="mt-3 mx-3"
+                          <ChartLineSimple
+                            dataPoints={teamBPrediction.predictions.runrates}
+                            className="mt-3"
                             style={{ height: "70px" }}
-                            backgroundColor="rgb(250, 250, 250, 0.5)"
+                            backgroundColor="rgba(255,255,255,.2)"
+                            options={{
+                              elements: { line: { borderWidth: 2.5 } },
+                            }}
+                            pointHoverBackgroundColor="warning"
                             label="Run Rate"
                             labels="runrate"
                           />
@@ -541,20 +631,46 @@ export default class T20 extends Component {
                       />
                     </Col>
                   </Row>
+                </div>
+              ) : (
+                <div>Please select values to continue.</div>
+              )}
+            </Card>
+            <Card
+              title="Run Rate Prediction"
+              style={{ width: "100%", borderRadius: 10, marginTop: 10 }}
+            >
+              {this.state.isLoading ? (
+                <Spin />
+              ) : this.state.predicted ? (
+                <div>
                   <CChartBar
                     type="bar"
                     datasets={[
                       {
-                        label: "Run Rate",
+                        label: "Run Rate " + this.state.team_a,
                         backgroundColor: "#f87979",
-                        data: this.state.runRate.prediction,
+                        data: teamAPrediction.predictions.runrates,
                       },
                     ]}
-                    labels={
-                      this.state.match_type === "ODI"
-                        ? ["10", "20", "30", "40", "50"]
-                        : ["10", "20"]
-                    }
+                    labels={["10", "20"]}
+                    options={{
+                      tooltips: {
+                        enabled: true,
+                      },
+                    }}
+                  />
+                  <CChartBar
+                    style={{ marginTop: 20 }}
+                    type="bar"
+                    datasets={[
+                      {
+                        label: "Run Rate " + this.state.team_b,
+                        backgroundColor: "#f87979",
+                        data: teamBPrediction.predictions.runrates,
+                      },
+                    ]}
+                    labels={["10", "20"]}
                     options={{
                       tooltips: {
                         enabled: true,

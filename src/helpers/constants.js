@@ -18,6 +18,7 @@ export default {
       RUN_RATE: "prediction/run_rate",
       SCORE_OF_TEAMS: "prediction/score_of_teams",
       PREDICT_MATCH: "prediction/predict_match",
+      PREDICT_MATCH_T20: "prediction/predict_match_T20",
     },
   },
 };
