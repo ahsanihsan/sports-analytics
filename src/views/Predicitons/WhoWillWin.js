@@ -26,6 +26,7 @@ import { CChartBar } from "@coreui/react-chartjs";
 import "./CustonCSS.css";
 
 import { isMobile } from "react-device-detect";
+import { getFlagImages } from "../../helpers/Flags";
 
 export default class WhoWillWin extends Component {
   constructor(props) {
@@ -512,29 +513,27 @@ export default class WhoWillWin extends Component {
                       />
                     </Form.Item>
                   </Col>
-                  {this.state.wickets ? (
-                    <Col span={12}>
-                      <label>Wickets Last 5 Overs</label>
-                      <Form.Item
-                        name="wickets_last_5"
-                        rules={[
-                          {
-                            required: true,
-                            message:
-                              "Please input wickets taken in last 5 overs !",
-                          },
-                        ]}
-                      >
-                        <InputNumber
-                          placeholder="Wickets in last 5 overs (0-9)"
-                          onChange={(fours) => this.setState({ fours })}
-                          style={{ width: "100%", marginTop: 5 }}
-                          min={0}
-                          max={this.state.wickets}
-                        />
-                      </Form.Item>
-                    </Col>
-                  ) : undefined}
+                  <Col span={12}>
+                    <label>Wickets Last 5 Overs</label>
+                    <Form.Item
+                      name="wickets_last_5"
+                      rules={[
+                        {
+                          required: true,
+                          message:
+                            "Please input wickets taken in last 5 overs !",
+                        },
+                      ]}
+                    >
+                      <InputNumber
+                        placeholder="Wickets in last 5 overs (0-9)"
+                        onChange={(fours) => this.setState({ fours })}
+                        style={{ width: "100%", marginTop: 5 }}
+                        min={0}
+                        max={this.state.wickets}
+                      />
+                    </Form.Item>
+                  </Col>
                 </Row>
                 <Form.Item>
                   <Button
@@ -564,7 +563,10 @@ export default class WhoWillWin extends Component {
               {this.state.isLoading ? (
                 <Spin />
               ) : this.state.predicted ? (
-                <div>{this.getWinner()} will win this match</div>
+                <div>
+                  <img src={getFlagImages(this.getWinner())} />
+                  {this.getWinner()} will win this match
+                </div>
               ) : (
                 <div>Please select values to continue.</div>
               )}
