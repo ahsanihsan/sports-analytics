@@ -1,12 +1,12 @@
 export const getNavBar = (isAdmin) => {
   if (isAdmin)
     return [
-      // {
-      //   _tag: "CSidebarNavItem",
-      //   name: "Dashboard",
-      //   to: "/dashboard",
-      //   // icon: "cil-speedometer",
-      // },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Dashboard",
+        to: "/dashboard",
+        // icon: "cil-speedometer",
+      },
       {
         _tag: "CSidebarNavItem",
         name: "Users",
@@ -33,12 +33,12 @@ export const getNavBar = (isAdmin) => {
     ];
   else
     return [
-      // {
-      //   _tag: "CSidebarNavItem",
-      //   name: "Dashboard",
-      //   to: "/dashboard",
-      //   // icon: "cil-speedometer",
-      // },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Dashboard",
+        to: "/dashboard",
+        // icon: "cil-speedometer",
+      },
       {
         _tag: "CSidebarNavItem",
         name: "Match Prediction ODI",
