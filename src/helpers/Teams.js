@@ -23,7 +23,7 @@ export const Teams = [
   "Sri Lanka",
   "United Arab Emirates",
   "United States of America",
-  // "West Indies",
+  "West Indies",
   "Zimbabwe",
 ];
 

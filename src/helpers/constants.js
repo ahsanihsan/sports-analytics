@@ -19,6 +19,7 @@ export default {
       SCORE_OF_TEAMS: "prediction/score_of_teams",
       PREDICT_MATCH: "prediction/predict_match",
       PREDICT_MATCH_T20: "prediction/predict_match_T20",
+      WHAT_SCORE_WILL_BATSMAN_MAKE: "prediction/batsman_performance",
     },
   },
 };
