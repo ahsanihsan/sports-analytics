@@ -284,6 +284,13 @@ export default class WhoWillWin extends Component {
                       ]}
                     >
                       <Select
+                        optionFilterProp="children"
+                        showSearch
+                        filterOption={(input, option) =>
+                          option.children
+                            .toLowerCase()
+                            .indexOf(input.toLowerCase()) >= 0
+                        }
                         value={this.state.team_a}
                         onChange={(team_a) => this.setState({ team_a })}
                         placeholder="Select Team A"
@@ -305,6 +312,13 @@ export default class WhoWillWin extends Component {
                       ]}
                     >
                       <Select
+                        optionFilterProp="children"
+                        showSearch
+                        filterOption={(input, option) =>
+                          option.children
+                            .toLowerCase()
+                            .indexOf(input.toLowerCase()) >= 0
+                        }
                         value={this.state.team_b}
                         onChange={(team_b) => this.setState({ team_b })}
                         placeholder="Select Team B"
@@ -328,6 +342,13 @@ export default class WhoWillWin extends Component {
                   ]}
                 >
                   <Select
+                    optionFilterProp="children"
+                    showSearch
+                    filterOption={(input, option) =>
+                      option.children
+                        .toLowerCase()
+                        .indexOf(input.toLowerCase()) >= 0
+                    }
                     value={this.state.venue}
                     onChange={(venue) => this.setState({ venue })}
                     placeholder="Select Venue"
@@ -613,6 +634,46 @@ export default class WhoWillWin extends Component {
               )}
             </Card>
             <Card
+              title="Batting Team Predicted Score"
+              style={{ width: "100%", borderRadius: 10, marginTop: 10 }}
+            >
+              {this.state.isLoading ? (
+                <Spin />
+              ) : this.state.predicted ? (
+                <div>
+                  <Row gutter={10}>
+                    <Col span={24}>
+                      <CWidgetDropdown
+                        color={
+                          this.getWinner() === this.state.team_a
+                            ? "gradient-success"
+                            : "gradient-danger"
+                        }
+                        header={teamAPrediction.predictions.total}
+                        text={this.state.team_a + " Score"}
+                        footerSlot={
+                          <ChartLineSimple
+                            dataPoints={teamAPrediction.predictions.runrates}
+                            className="mt-3"
+                            style={{ height: "70px" }}
+                            backgroundColor="rgba(255,255,255,.2)"
+                            options={{
+                              elements: { line: { borderWidth: 2.5 } },
+                            }}
+                            pointHoverBackgroundColor="warning"
+                            label="Run Rate"
+                            labels="runrate"
+                          />
+                        }
+                      />
+                    </Col>
+                  </Row>
+                </div>
+              ) : (
+                <div>Please select values to continue.</div>
+              )}
+            </Card>
+            <Card
               title="Predicted Boundaries"
               style={{ width: "100%", borderRadius: 10, marginTop: 10 }}
             >
@@ -647,46 +708,6 @@ export default class WhoWillWin extends Component {
                         color="gradient-warning"
                         header={teamAPrediction.predictions.total_fours}
                         text={"Total Fours"}
-                        footerSlot={
-                          <ChartLineSimple
-                            dataPoints={teamAPrediction.predictions.runrates}
-                            className="mt-3"
-                            style={{ height: "70px" }}
-                            backgroundColor="rgba(255,255,255,.2)"
-                            options={{
-                              elements: { line: { borderWidth: 2.5 } },
-                            }}
-                            pointHoverBackgroundColor="warning"
-                            label="Run Rate"
-                            labels="runrate"
-                          />
-                        }
-                      />
-                    </Col>
-                  </Row>
-                </div>
-              ) : (
-                <div>Please select values to continue.</div>
-              )}
-            </Card>
-            <Card
-              title="Batting Team Predicted Score"
-              style={{ width: "100%", borderRadius: 10, marginTop: 10 }}
-            >
-              {this.state.isLoading ? (
-                <Spin />
-              ) : this.state.predicted ? (
-                <div>
-                  <Row gutter={10}>
-                    <Col span={24}>
-                      <CWidgetDropdown
-                        color={
-                          this.getWinner() === this.state.team_a
-                            ? "gradient-success"
-                            : "gradient-danger"
-                        }
-                        header={teamAPrediction.predictions.total}
-                        text={this.state.team_a + " Score"}
                         footerSlot={
                           <ChartLineSimple
                             dataPoints={teamAPrediction.predictions.runrates}

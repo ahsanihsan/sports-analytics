@@ -271,6 +271,13 @@ export default class T20 extends Component {
                       ]}
                     >
                       <Select
+                        optionFilterProp="children"
+                        showSearch
+                        filterOption={(input, option) =>
+                          option.children
+                            .toLowerCase()
+                            .indexOf(input.toLowerCase()) >= 0
+                        }
                         value={this.state.team_a}
                         onChange={(team_a) => this.setState({ team_a })}
                         placeholder="Select Team A"
@@ -292,6 +299,13 @@ export default class T20 extends Component {
                       ]}
                     >
                       <Select
+                        optionFilterProp="children"
+                        showSearch
+                        filterOption={(input, option) =>
+                          option.children
+                            .toLowerCase()
+                            .indexOf(input.toLowerCase()) >= 0
+                        }
                         value={this.state.team_b}
                         onChange={(team_b) => this.setState({ team_b })}
                         placeholder="Select Team B"
@@ -318,6 +332,13 @@ export default class T20 extends Component {
                     value={this.state.venue}
                     onChange={(venue) => this.setState({ venue })}
                     placeholder="Select Venue"
+                    optionFilterProp="children"
+                    showSearch
+                    filterOption={(input, option) =>
+                      option.children
+                        .toLowerCase()
+                        .indexOf(input.toLowerCase()) >= 0
+                    }
                     style={{
                       width: "100%",
                     }}
