@@ -49,10 +49,11 @@ class Users extends React.Component {
       });
   };
   componentDidMount() {
-    const role = window.localStorage.getItem("@role");
-    const isAdmin = role === "ROLE_ADMIN";
-    if (!isAdmin) this.props.history.goBack();
-    if (isAdmin) this.getUsers();
+    // const role = window.localStorage.getItem("@role");
+    // const isAdmin = role === "ROLE_ADMIN";
+    // if (!isAdmin) this.props.history.goBack();
+    // if (isAdmin)
+    this.getUsers();
   }
   render() {
     const columns = [

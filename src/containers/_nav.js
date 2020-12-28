@@ -25,11 +25,11 @@ export const getNavBar = (isAdmin) => {
         to: "/t20",
         // icon: "cil-hand-peace",
       },
-      // {
-      //   _tag: "CSidebarNavItem",
-      //   name: "Batsman Score",
-      //   to: "/batsman-scores",
-      // },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Batsman Score",
+        to: "/batsman-scores",
+      },
     ];
   else
     return [
@@ -51,10 +51,16 @@ export const getNavBar = (isAdmin) => {
         to: "/t20",
         // icon: "cil-hand-peace",
       },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Batsman Score",
+        to: "/batsman-scores",
+      },
       // {
       //   _tag: "CSidebarNavItem",
-      //   name: "Batsman Score",
-      //   to: "/batsman-scores",
+      //   name: "Users",
+      //   to: "/users",
+      //   // icon: "cil-user",
       // },
       // {
       //   _tag: "CSidebarNavItem",

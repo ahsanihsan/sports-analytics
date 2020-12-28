@@ -84,8 +84,15 @@ export default class WhoWillWin extends Component {
       sixes_till_now: values.sixes_till_now,
       no_balls_till_now: values.no_balls_till_now,
       wide_balls_till_now: values.wide_balls_till_now,
+      target: 0,
     };
 
+    this.setState({ isLoading: true });
+
+    let teamAPrediction = await post(
+      constants.URL.PREDICTION.PREDICT_MATCH_WITH_TARGET_ODI,
+      dataA
+    );
     const dataB = {
       venue: values.venue,
       bowl_team: values.team_a,
@@ -99,15 +106,10 @@ export default class WhoWillWin extends Component {
       sixes_till_now: values.sixes_till_now,
       no_balls_till_now: values.no_balls_till_now,
       wide_balls_till_now: values.wide_balls_till_now,
+      target: teamAPrediction.data.predictions.total + 1,
     };
-    this.setState({ isLoading: true });
-
-    let teamAPrediction = await post(
-      constants.URL.PREDICTION.PREDICT_MATCH,
-      dataA
-    );
     let teamBPrediction = await post(
-      constants.URL.PREDICTION.PREDICT_MATCH,
+      constants.URL.PREDICTION.PREDICT_MATCH_WITH_TARGET_ODI,
       dataB
     );
 
