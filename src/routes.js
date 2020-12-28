@@ -69,6 +69,9 @@ const BatsmanGetsBowled = React.lazy(() =>
 const BatsmanScores = React.lazy(() =>
   import("./views/Predicitons/BatsmanScores")
 );
+const BatsmanScoresT20 = React.lazy(() =>
+  import("./views/Predicitons/BatsmanScoresT20")
+);
 const routes = [
   // { path: "/", exact: true, name: "Home" },
   { path: "/dashboard", name: "Dashboard", component: Dashboard },
@@ -97,9 +100,15 @@ const routes = [
     exact: true,
   },
   {
-    path: "/batsman-scores",
-    name: "Batsman Scores",
+    path: "/batsman-scores-odi",
+    name: "Batsman Scores ODI",
     component: BatsmanScores,
+    exact: true,
+  },
+  {
+    path: "/batsman-scores-t20",
+    name: "Batsman Scores T20",
+    component: BatsmanScoresT20,
     exact: true,
   },
   {

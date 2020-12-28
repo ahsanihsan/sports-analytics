@@ -34,23 +34,41 @@ export default class T20 extends Component {
     super(props);
     this.state = {
       isLoading: false,
-      // team_a: "Pakistan",
-      // team_b: "India",
-      // month: "February",
-      // match_type: "ODI",
-      // city: "Karachi",
-      // toss_won: "Pakistan",
-      // toss_decision: "bat",
-      // venue: "National Stadium",
-      team_a: "",
-      team_b: "",
-      month: "",
-      match_type: "",
-      city: "",
-      toss_won: "",
-      toss_decision: "",
-      venue: "",
+      team_a: "Pakistan",
+      team_b: "India",
+      month: "February",
+      match_type: "ODI",
+      city: "Karachi",
+      toss_won: "Pakistan",
+      toss_decision: "bat",
+      venue: "National Stadium",
+      // team_a: "",
+      // team_b: "",
+      // month: "",
+      // match_type: "",
+      // city: "",
+      // toss_won: "",
+      // toss_decision: "",
+      // venue: "",
     };
+  }
+
+  componentDidMount() {
+    this.setState({
+      venue: "Sharjah Cricket Stadium",
+      team_a: "Pakistan",
+      team_b: "India",
+      runs: 100,
+      wickets: 3,
+      overs: 5,
+      balls: 1,
+      runs_last_5: 10,
+      wickets_last_5: 0,
+      fours_till_now: 0,
+      sixes_till_now: 1,
+      no_balls_till_now: 0,
+      wide_balls_till_now: 0,
+    });
   }
 
   handleSubmit = async (values) => {
@@ -67,8 +85,15 @@ export default class T20 extends Component {
       sixes_till_now: values.sixes_till_now,
       no_balls_till_now: values.no_balls_till_now,
       wide_balls_till_now: values.wide_balls_till_now,
+      target: 0,
     };
 
+    this.setState({ isLoading: true });
+
+    let teamAPrediction = await post(
+      constants.URL.PREDICTION.PREDICT_MATCH_WITH_TARGET_T20,
+      dataA
+    );
     const dataB = {
       venue: values.venue,
       bowl_team: values.team_a,
@@ -82,28 +107,23 @@ export default class T20 extends Component {
       sixes_till_now: values.sixes_till_now,
       no_balls_till_now: values.no_balls_till_now,
       wide_balls_till_now: values.wide_balls_till_now,
+      target: teamAPrediction.data.predictions.total + 1,
     };
-    this.setState({ isLoading: true });
-
-    let teamAPrediction = await post(
-      constants.URL.PREDICTION.PREDICT_MATCH_T20,
-      dataA
-    );
     let teamBPrediction = await post(
-      constants.URL.PREDICTION.PREDICT_MATCH_T20,
+      constants.URL.PREDICTION.PREDICT_MATCH_WITH_TARGET_T20,
       dataB
     );
 
-    console.log("******* VALUES ******");
-    console.log(teamAPrediction);
-    console.log(teamBPrediction);
-    console.log("******* VALUES ******");
     if (
       teamAPrediction &&
       teamBPrediction &&
       teamAPrediction.data &&
       teamBPrediction.data
     ) {
+      console.log("******* HELLO ******");
+      console.log(teamAPrediction.data);
+      console.log(teamBPrediction.data);
+      console.log("******* HELLO ******");
       this.setState({
         teamAPrediction: teamAPrediction.data,
         teamBPrediction: teamBPrediction.data,
@@ -243,21 +263,21 @@ export default class T20 extends Component {
           <Col xxl={9} xl={9} md={9} sm={24} xs={24}>
             <Card title="Team Data" style={{ width: "100%", borderRadius: 10 }}>
               <Form
-                // initialValues={{
-                //   venue: "Sharjah Cricket Stadium",
-                //   team_a: "Pakistan",
-                //   team_b: "India",
-                //   runs: 100,
-                //   wickets: 3,
-                //   overs: 5,
-                //   balls: 1,
-                //   runs_last_5: 10,
-                //   wickets_last_5: 0,
-                //   fours_till_now: 0,
-                //   sixes_till_now: 1,
-                //   no_balls_till_now: 0,
-                //   wide_balls_till_now: 0,
-                // }}
+                initialValues={{
+                  venue: "Sharjah Cricket Stadium",
+                  team_a: "Pakistan",
+                  team_b: "India",
+                  runs: 100,
+                  wickets: 3,
+                  overs: 5,
+                  balls: 1,
+                  runs_last_5: 10,
+                  wickets_last_5: 0,
+                  fours_till_now: 0,
+                  sixes_till_now: 1,
+                  no_balls_till_now: 0,
+                  wide_balls_till_now: 0,
+                }}
                 name="basic"
                 onFinish={(values) => this.handleSubmit(values)}
               >
@@ -759,7 +779,7 @@ export default class T20 extends Component {
                         data: teamAPrediction.predictions.runrates,
                       },
                     ]}
-                    labels={["10", "20"]}
+                    labels={["4", "8", "12", "16", "20"]}
                     options={{
                       tooltips: {
                         enabled: true,

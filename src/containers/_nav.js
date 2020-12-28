@@ -27,8 +27,13 @@ export const getNavBar = (isAdmin) => {
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Batsman Score",
-        to: "/batsman-scores",
+        name: "Batsman Score ODI",
+        to: "/batsman-scores-odi",
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Batsman Score T20",
+        to: "/batsman-scores-t20",
       },
     ];
   else
@@ -53,8 +58,13 @@ export const getNavBar = (isAdmin) => {
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Batsman Score",
-        to: "/batsman-scores",
+        name: "Batsman Score ODI",
+        to: "/batsman-scores-odi",
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Batsman Score T20",
+        to: "/batsman-scores-t20",
       },
       // {
       //   _tag: "CSidebarNavItem",

@@ -47,9 +47,12 @@ export default class BatsmanScores extends Component {
         values.total_sixes_by_striker_till_now * 6);
     this.setState({ isLoading: true });
     let batsmanScores = await post(
-      constants.URL.PREDICTION.PREDICT_BATSMAN_WITH_TARGET_ODI,
+      constants.URL.PREDICTION.PREDICT_BATSMAN_WITH_TARGET_T20,
       values
     );
+    console.log(batsmanScores);
+    console.log(batsmanScores);
+    console.log(batsmanScores);
     this.setState({ isLoading: false });
     if (batsmanScores && batsmanScores.status === 200) {
       this.setState({
