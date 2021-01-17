@@ -20,6 +20,7 @@ import constants from "../../../helpers/constants";
 import { Button, message, notification } from "antd";
 import { post } from "../../../helpers/request";
 import "./index.css";
+import { validateEmail } from "../../../helpers/Validators";
 
 class Login extends Component {
   constructor(props) {
@@ -32,6 +33,11 @@ class Login extends Component {
   }
   handleSubmit = () => {
     const { email, password } = this.state;
+    if (!validateEmail(email)) {
+      message.error("Please enter a valid email address");
+      return false;
+    }
+
     if (email && password) {
       this.setState({ isLoading: true });
       post(constants.URL.AUTHENTICATION.SIGN_IN, {
@@ -58,7 +64,7 @@ class Login extends Component {
           });
         });
     } else {
-      message.error("Please enter all data to continue");
+      message.error("Please enter the email and password to continue");
     }
   };
   render() {

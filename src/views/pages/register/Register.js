@@ -18,6 +18,7 @@ import { Button, message, notification } from "antd";
 import { post } from "../../../helpers/request";
 import constants from "../../../helpers/constants";
 import "../login/index.css";
+import { validateEmail } from "../../../helpers/Validators";
 
 export default class Register extends React.Component {
   constructor(props) {
@@ -40,6 +41,14 @@ export default class Register extends React.Component {
       password,
       confirmPassword,
     } = this.state;
+    if (!validateEmail(email)) {
+      message.error("Please enter a valid email address");
+      return false;
+    }
+    if (password !== confirmPassword) {
+      message.error("Passwords do not match");
+      return false;
+    }
     if (fname && lname && password && confirmPassword) {
       this.setState({ isLoading: true });
       post(constants.URL.AUTHENTICATION.SIGN_UP, {
@@ -49,9 +58,14 @@ export default class Register extends React.Component {
         email,
       })
         .then((response) => {
-          this.setState({ isLoading: false });
           if (response && response.status === 200) {
-            this.props.history.goBack();
+            notification.success({
+              message: "You have been registered with Sports analytics.",
+            });
+            setTimeout(() => {
+              this.props.history.goBack();
+              this.setState({ isLoading: false });
+            }, 1000);
           } else {
             notification.error({
               message: response.data.message,
