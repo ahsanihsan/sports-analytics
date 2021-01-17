@@ -195,28 +195,34 @@ export default class LiveMatch extends Component {
                 </Card>
               </Col>
               <Col span={8}>
-                <Card title="Bowler">
+                {match.bowler ? (
                   <div>
-                    <span style={{ fontWeight: "bold" }}>Name:</span>{" "}
-                    {match.bowler.name}
+                    <Card title="Bowler">
+                      <div>
+                        <span style={{ fontWeight: "bold" }}>Name:</span>{" "}
+                        {match.bowler.name}
+                      </div>
+                      <div>
+                        <span style={{ fontWeight: "bold" }}>Wickets:</span>{" "}
+                        {match.bowler.wickets}
+                      </div>
+                      <div>
+                        <span style={{ fontWeight: "bold" }}>
+                          Runs Against:
+                        </span>{" "}
+                        {match.bowler.runsAgainst}
+                      </div>
+                      <div>
+                        <span style={{ fontWeight: "bold" }}>Bowler Over:</span>{" "}
+                        {match.bowler.bowlerOver}
+                      </div>
+                      <div>
+                        <span style={{ fontWeight: "bold" }}>Economy:</span>{" "}
+                        {match.bowler.economy}
+                      </div>
+                    </Card>
                   </div>
-                  <div>
-                    <span style={{ fontWeight: "bold" }}>Wickets:</span>{" "}
-                    {match.bowler.wickets}
-                  </div>
-                  <div>
-                    <span style={{ fontWeight: "bold" }}>Runs Against:</span>{" "}
-                    {match.bowler.runsAgainst}
-                  </div>
-                  <div>
-                    <span style={{ fontWeight: "bold" }}>Bowler Over:</span>{" "}
-                    {match.bowler.bowlerOver}
-                  </div>
-                  <div>
-                    <span style={{ fontWeight: "bold" }}>Economy:</span>{" "}
-                    {match.bowler.economy}
-                  </div>
-                </Card>
+                ) : undefined}
               </Col>
             </Row>
             <Card title="Innings" className="mt-2">

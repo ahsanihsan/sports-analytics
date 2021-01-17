@@ -20,7 +20,6 @@ import {
 import constants from "../../helpers/constants";
 import { post } from "../../helpers/request";
 import { CWidgetDropdown } from "@coreui/react";
-import ChartBarSimple from "../charts/ChartBarSimple";
 import ChartLineSimple from "../charts/ChartLineSimple";
 import { CChartBar } from "@coreui/react-chartjs";
 import "./CustonCSS.css";
@@ -56,7 +55,7 @@ export default class WhoWillWin extends Component {
     this.setState({
       venue: "Sharjah Cricket Stadium",
       team_a: "Pakistan",
-      team_b: "India",
+      team_b: "England",
       runs: 100,
       wickets: 3,
       overs: 5,
@@ -126,45 +125,14 @@ export default class WhoWillWin extends Component {
       this.setState({
         teamAPrediction: teamAPrediction.data,
         teamBPrediction: teamBPrediction.data,
+        historyTeamA: teamAPrediction.data.data,
+        historyTeamB: teamBPrediction.data.data,
         isLoading: false,
         predicted: true,
       });
     } else {
       this.setState({ error: true, isLoading: false });
     }
-    // this.setState({ isLoading: false });
-    // let runRate = await post(constants.URL.PREDICTION.RUN_RATE, {
-    //   match_type,
-    //   batting_team:
-    //     toss_won === team_a && toss_decision === "bat" ? team_a : team_b,
-    //   bowling_team:
-    //     toss_won === team_a && toss_decision === "field" ? team_a : team_b,
-    //   city,
-    //   month,
-    // });
-    // if (whoWillWin && runRate) {
-    //   let previousMatches = whoWillWin.data.data;
-    //   let matchHistory = [];
-    //   previousMatches.map((item) => {
-    //     matchHistory.push(item);
-    //   });
-    //   let totalScore = 0;
-    //   let runRateRound = [];
-    //   runRate.data.prediction.map((item) => {
-    //     runRateRound.push(Math.round(item));
-    //     const perTenOvers = item * 10;
-    //     totalScore += perTenOvers;
-    //   });
-    //   this.setState({
-    //     whoWillWin: whoWillWin.data,
-    //     runRate: runRate.data,
-    //     totalScore: Math.round(totalScore),
-    //     matchHistory,
-    //     isLoading: false,
-    //   });
-    // } else {
-    //   this.setState({ error: true, isLoading: false });
-    // }
   };
 
   mapVenue = () => {
@@ -196,41 +164,26 @@ export default class WhoWillWin extends Component {
   render() {
     const columns = [
       {
-        title: "City",
-        dataIndex: "city",
-        key: "city",
-      },
-      {
-        title: "Team A",
+        title: "Batting Team",
         fixed: "left",
-        dataIndex: "team_a",
-        key: "team_a",
+        dataIndex: "bat_team",
+        key: "bat_team",
       },
       {
-        title: "Team B",
+        title: "Bowling Team",
         fixed: "left",
-        dataIndex: "team_b",
-        key: "team_b",
+        dataIndex: "bowl_team",
+        key: "bowl_team",
       },
       {
-        title: "Score Team A",
-        dataIndex: "score_a",
-        key: "score_a",
+        title: "Batsman",
+        dataIndex: "batsman",
+        key: "batsman",
       },
       {
-        title: "Score Team B",
-        dataIndex: "score_b",
-        key: "score_b",
-      },
-      {
-        title: "Match Type",
-        dataIndex: "match_type",
-        key: "match_type",
-      },
-      {
-        title: "Month",
-        dataIndex: "month",
-        key: "month",
+        title: "Bowler",
+        dataIndex: "bowler",
+        key: "bowler",
       },
       {
         title: "Winner",
@@ -243,14 +196,24 @@ export default class WhoWillWin extends Component {
         key: "venue",
       },
       {
-        title: "Toss Won",
-        dataIndex: "toss_won",
-        key: "toss_won",
+        title: "Overs",
+        dataIndex: "overs",
+        key: "overs",
       },
       {
-        title: "Toss Decision",
-        dataIndex: "toss_decision",
-        key: "toss_decision",
+        title: "Runs Till Now",
+        dataIndex: "runs",
+        key: "runs",
+      },
+      {
+        title: "Wickets Till Now",
+        dataIndex: "wickets",
+        key: "wickets",
+      },
+      {
+        title: "Total Score",
+        dataIndex: "total",
+        key: "total",
       },
     ];
 
@@ -265,7 +228,7 @@ export default class WhoWillWin extends Component {
                 initialValues={{
                   venue: "Sharjah Cricket Stadium",
                   team_a: "Pakistan",
-                  team_b: "India",
+                  team_b: "England",
                   runs: 100,
                   wickets: 3,
                   overs: 5,
@@ -768,7 +731,7 @@ export default class WhoWillWin extends Component {
           </Col>
         </Row>
         <Card
-          title="History"
+          title="History Team A"
           scroll={{ x: 1500 }}
           style={{
             width: "100%",
@@ -777,7 +740,19 @@ export default class WhoWillWin extends Component {
             marginBottom: 20,
           }}
         >
-          <Table columns={columns} dataSource={this.state.matchHistory} />
+          <Table columns={columns} dataSource={this.state.historyTeamA} />
+        </Card>
+        <Card
+          title="History Team B"
+          scroll={{ x: 1500 }}
+          style={{
+            width: "100%",
+            borderRadius: 10,
+            marginTop: 20,
+            marginBottom: 20,
+          }}
+        >
+          <Table columns={columns} dataSource={this.state.historyTeamB} />
         </Card>
       </div>
     );
