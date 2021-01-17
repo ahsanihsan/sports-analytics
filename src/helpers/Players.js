@@ -841,7 +841,6 @@ export const Players = {
   },
   Pakistan: {
     batsmen: [
-      "Azhar Ali",
       "Sharjeel Khan",
       "Babar Azam",
       "Shoaib Malik",
@@ -1058,7 +1057,6 @@ export const Players = {
       "Zulfiqar Babar",
       "Asad Shafiq",
       "Younis Khan",
-      "Azhar Ali",
       "Umar Amin",
       "Rahat Ali",
       "Hussain Talat",

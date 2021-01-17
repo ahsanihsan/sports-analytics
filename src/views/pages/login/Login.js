@@ -43,7 +43,7 @@ class Login extends Component {
           if (response && response.status === 200) {
             window.localStorage.setItem("@token", response.data.accessToken);
             window.localStorage.setItem("@role", response.data.roles[0]);
-            this.props.history.push("/dashboard");
+            this.props.history.push("/matches");
           } else {
             notification.error({
               message: response.data.message,

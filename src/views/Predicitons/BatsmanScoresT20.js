@@ -41,10 +41,6 @@ export default class BatsmanScores extends Component {
 
   handleSubmit = async (values) => {
     values.over = values.over + "." + values.balls;
-    values.total_singles_by_striker_till_now =
-      values.score_by_striker_till_now -
-      (values.total_fours_by_striker_till_now * 4 +
-        values.total_sixes_by_striker_till_now * 6);
     this.setState({ isLoading: true });
     let batsmanScores = await post(
       constants.URL.PREDICTION.PREDICT_BATSMAN_WITH_TARGET_T20,
@@ -64,9 +60,9 @@ export default class BatsmanScores extends Component {
       this.setState({ error: true, isLoading: false });
     }
   };
-  componentDidMount() {
-    this.setState({ bating_team: "Pakistan", striker: "Azhar Ali" });
-  }
+  // componentDidMount() {
+  //   this.setState({ bating_team: "Pakistan", striker: "Azhar Ali" });
+  // }
   mapVenue = (city) => {
     let venue = [];
     cityAndVenue.map((item) => {
@@ -178,25 +174,36 @@ export default class BatsmanScores extends Component {
               <Form
                 name="basic"
                 onFinish={(values) => this.handleSubmit(values)}
-                initialValues={{
-                  venue: "Sheikh Zayed Stadium",
-                  bating_team: "Pakistan",
-                  striker: "Azhar Ali",
-                  bowling_team: "India",
-                  over: 10,
-                  balls: 1,
-                  score_by_striker_till_now: 16,
-                  balls_played_by_striker_till_now: 10,
-
-                  total_fours_by_striker_till_now: 2,
-                  total_sixes_by_striker_till_now: 0,
-
-                  total_singles_by_striker_till_now: 8,
-
-                  total_dots_by_striker_till_now: 0,
-                  total_batting_team_score_till_now: 100,
-                }}
               >
+                <Row>
+                  <Col span={24}>
+                    <label>Select Batting Team</label>
+                    <Form.Item
+                      name="bating_team"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please select the batting team!",
+                        },
+                      ]}
+                    >
+                      <Select
+                        value={this.state.bating_team}
+                        onChange={(bating_team) =>
+                          this.setState({ bating_team })
+                        }
+                        placeholder="Select Batting Team"
+                        style={{
+                          width: "100%",
+                          borderRadius: 10,
+                          marginTop: 5,
+                        }}
+                      >
+                        {this.renderTeams()}
+                      </Select>
+                    </Form.Item>
+                  </Col>
+                </Row>
                 <Row gutter={10}>
                   <Col span={12}>
                     <label>Select Batsman</label>

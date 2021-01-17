@@ -30,11 +30,12 @@ const request = function (options) {
   return client(options).then(onSuccess).catch(onError);
 };
 
-export const get = (url, params) => {
+export const get = (url, headers, params) => {
   return request({
     url,
     method: "GET",
     params: params,
+    headers,
   });
 };
 

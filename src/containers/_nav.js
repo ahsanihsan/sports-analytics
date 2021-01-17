@@ -3,8 +3,8 @@ export const getNavBar = (isAdmin) => {
     return [
       {
         _tag: "CSidebarNavItem",
-        name: "Dashboard",
-        to: "/dashboard",
+        name: "Matches",
+        to: "/matches",
         // icon: "cil-speedometer",
       },
       {
@@ -40,8 +40,8 @@ export const getNavBar = (isAdmin) => {
     return [
       {
         _tag: "CSidebarNavItem",
-        name: "Dashboard",
-        to: "/dashboard",
+        name: "Matches",
+        to: "/matches",
         // icon: "cil-speedometer",
       },
       {

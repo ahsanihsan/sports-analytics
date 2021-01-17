@@ -119,6 +119,10 @@ export default class WhoWillWin extends Component {
       teamAPrediction.data &&
       teamBPrediction.data
     ) {
+      console.log("******* HELLO *******");
+      console.log(teamAPrediction.data);
+      console.log(teamBPrediction.data);
+      console.log("******* HELLO *******");
       this.setState({
         teamAPrediction: teamAPrediction.data,
         teamBPrediction: teamBPrediction.data,
