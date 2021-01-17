@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { CRow } from "@coreui/react";
 
 import usersData from "./UsersData";
-import { notification, Popconfirm, Table } from "antd";
+import { notification, Popconfirm, Select, Table } from "antd";
 import { get, post } from "../../helpers/request";
 import constants from "../../helpers/constants";
 
@@ -49,12 +49,9 @@ class Users extends React.Component {
       });
   };
   componentDidMount() {
-    // const role = window.localStorage.getItem("@role");
-    // const isAdmin = role === "ROLE_ADMIN";
-    // if (!isAdmin) this.props.history.goBack();
-    // if (isAdmin)
     this.getUsers();
   }
+  changeRole = (role) => {};
   render() {
     const columns = [
       {
@@ -83,14 +80,15 @@ class Users extends React.Component {
         key: "isBlackListed",
       },
       {
-        title: "Action",
+        title: "Ban User",
         key: "action",
         render: (text, record) => {
-          console.log(record);
           const isBan = record.isBlackListed === "Yes";
+          console.log(record);
           return (
             <div>
               <Popconfirm
+                disabled={record.roles === "admin"}
                 onConfirm={() => this.blackListUser(record._id)}
                 title={
                   "Are you sure you would like to " +
@@ -103,15 +101,33 @@ class Users extends React.Component {
               >
                 <p
                   style={{
-                    color: "#1890ff",
+                    color: record.roles === "user" ? "#1890ff" : "#e4e4e4",
                     cursor: "pointer",
-                    textDecorationLine: "underline",
+                    textDecorationLine:
+                      record.roles === "user" ? "underline" : undefined,
                   }}
                 >
                   {isBan ? "Unban" : "Ban"}
                 </p>
               </Popconfirm>
             </div>
+          );
+        },
+      },
+      {
+        title: "Change User Role",
+        key: "change_user_role",
+        render: (text, record) => {
+          return (
+            <Select
+              style={{ width: "100%" }}
+              placeholder="Select Role"
+              defaultValue={record.roles}
+              onChange={(value) => this.changeRole(value)}
+            >
+              <Select.Option value="admin">Admin</Select.Option>
+              <Select.Option value="user">User</Select.Option>
+            </Select>
           );
         },
       },
