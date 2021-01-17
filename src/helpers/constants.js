@@ -6,6 +6,7 @@ export default {
     USER: {
       GET_ALL_USERS: "users/all",
       BLACK_LIST_USER: "users/black-list/",
+      CHANGE_USER_ROLE: "users/change-role/",
     },
     AUTHENTICATION: {
       SIGN_UP: "auth/signup",

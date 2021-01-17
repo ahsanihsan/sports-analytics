@@ -51,7 +51,23 @@ class Users extends React.Component {
   componentDidMount() {
     this.getUsers();
   }
-  changeRole = (role) => {};
+
+  changeRole = (id, role) => {
+    this.setState({ isLoading: true });
+    post(constants.URL.USER.CHANGE_USER_ROLE + id, { role })
+      .then((response) => {
+        if (response && response.data) {
+          this.getUsers();
+        }
+      })
+      .catch((error) => {
+        notification.error({
+          message:
+            "There was a problem fetching users, for you. Our team is looking at the issue on our servers.",
+        });
+      });
+  };
+
   render() {
     const columns = [
       {
@@ -123,7 +139,7 @@ class Users extends React.Component {
               style={{ width: "100%" }}
               placeholder="Select Role"
               defaultValue={record.roles}
-              onChange={(value) => this.changeRole(value)}
+              onChange={(value) => this.changeRole(record._id, value)}
             >
               <Select.Option value="admin">Admin</Select.Option>
               <Select.Option value="user">User</Select.Option>
