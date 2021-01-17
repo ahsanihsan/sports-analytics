@@ -673,7 +673,7 @@ export default class T20 extends Component {
                       <CWidgetDropdown
                         color="gradient-warning"
                         header={teamAPrediction.predictions.total_fours}
-                        text={"Total Fours"}
+                        text="Total Fours"
                         footerSlot={
                           <ChartLineSimple
                             dataPoints={teamAPrediction.predictions.runrates}
@@ -720,23 +720,6 @@ export default class T20 extends Component {
                       },
                     }}
                   />
-                  {/* <CChartBar
-                    style={{ marginTop: 20 }}
-                    type="bar"
-                    datasets={[
-                      {
-                        label: "Run Rate " + this.state.team_b,
-                        backgroundColor: "#f87979",
-                        data: teamBPrediction.predictions.runrates,
-                      },
-                    ]}
-                    labels={["10", "20"]}
-                    options={{
-                      tooltips: {
-                        enabled: true,
-                      },
-                    }}
-                  /> */}
                 </div>
               ) : (
                 <div>Please select values to continue.</div>

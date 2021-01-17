@@ -28,14 +28,6 @@ export default class BatsmanScores extends Component {
     super(props);
     this.state = {
       teams: [],
-
-      // city: "Sharjah",
-      // month: "October",
-      // match_type: "ODI",
-      // bat_team: "Pakistan",
-      // bowling_team: "India",
-      // batsman: "Mohammad Hafeez",
-      // venue: "Sharjah Cricket Stadium",
     };
   }
 
@@ -46,13 +38,17 @@ export default class BatsmanScores extends Component {
       constants.URL.PREDICTION.PREDICT_BATSMAN_WITH_TARGET_T20,
       values
     );
-    console.log(batsmanScores);
-    console.log(batsmanScores);
-    console.log(batsmanScores);
-    this.setState({ isLoading: false });
+    let topPositions = batsmanScores.data.predictions.top_positions.map(
+      (item) => item - 1
+    );
+    topPositions.sort();
     if (batsmanScores && batsmanScores.status === 200) {
       this.setState({
         batsmanScores: batsmanScores.data.predictions,
+        topPositions,
+        totalByBatsman: batsmanScores.data.predictions.total,
+        foursByBatsman: batsmanScores.data.predictions.total_fours,
+        sixesByBatsman: batsmanScores.data.predictions.total_sixes,
         isLoading: false,
         predicted: true,
       });
@@ -60,9 +56,7 @@ export default class BatsmanScores extends Component {
       this.setState({ error: true, isLoading: false });
     }
   };
-  // componentDidMount() {
-  //   this.setState({ bating_team: "Pakistan", striker: "Azhar Ali" });
-  // }
+
   mapVenue = (city) => {
     let venue = [];
     cityAndVenue.map((item) => {
@@ -429,28 +423,59 @@ export default class BatsmanScores extends Component {
                 <Spin />
               ) : this.state.predicted ? (
                 <div>
-                  <CChartBar
-                    type="bar"
-                    datasets={[
-                      {
-                        label: "Runs By " + this.state.striker,
-                        backgroundColor: "rgb(228,102,81,0.9)",
-                        data: this.state.batsmanScores.total,
-                      },
-                    ]}
-                    options={{
-                      tooltips: {
-                        enabled: true,
-                      },
-                    }}
-                    labels={["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]}
-                  />
+                  <span style={{ fontSize: 16 }}>
+                    <h3 className="mb-2">Positions</h3>
+                    Batsman will perform best on{" "}
+                    <span style={{ fontSize: 18 }}>
+                      {this.state.topPositions.join(", ")}
+                    </span>{" "}
+                    position.
+                    {"\n"}
+                    <h3 className="mt-2 mb-2">Score</h3>
+                    <div className="mt-3">
+                      👉🏻 Batsman can score{" "}
+                      {this.state.totalByBatsman[this.state.topPositions[0]]} at{" "}
+                      position {this.state.topPositions[0]}.
+                    </div>
+                    <div className="mt-3">
+                      👉🏻 Batsman can score{" "}
+                      {this.state.totalByBatsman[this.state.topPositions[1]]} at{" "}
+                      position {this.state.topPositions[1]}.
+                    </div>
+                    <div className="mt-3">
+                      👉🏻 Batsman can score{" "}
+                      {this.state.totalByBatsman[this.state.topPositions[2]]} at{" "}
+                      position {this.state.topPositions[2]}.
+                    </div>
+                    <h3 className="mt-2 mb-2">Boundaries</h3>
+                    <div className="mt-3">
+                      👉🏻 Batsman can score{" "}
+                      {this.state.foursByBatsman[this.state.topPositions[0]]}{" "}
+                      fours and{" "}
+                      {this.state.foursByBatsman[this.state.topPositions[0]]}{" "}
+                      sixes at position {this.state.topPositions[0]}.
+                    </div>
+                    <div className="mt-3">
+                      👉🏻 Batsman can score{" "}
+                      {this.state.foursByBatsman[this.state.topPositions[1]]}{" "}
+                      fours and{" "}
+                      {this.state.foursByBatsman[this.state.topPositions[1]]}{" "}
+                      sixes at position {this.state.topPositions[1]}.
+                    </div>
+                    <div className="mt-3">
+                      👉🏻 Batsman can score{" "}
+                      {this.state.foursByBatsman[this.state.topPositions[2]]}{" "}
+                      fours and{" "}
+                      {this.state.foursByBatsman[this.state.topPositions[2]]}{" "}
+                      sixes at position {this.state.topPositions[2]}.
+                    </div>
+                  </span>
                 </div>
               ) : (
                 <div>Please select values to continue.</div>
               )}
             </Card>
-            <Card
+            {/* <Card
               title="Batsman Fours"
               style={{ width: "100%", borderRadius: 10, marginTop: 10 }}
             >
@@ -507,7 +532,7 @@ export default class BatsmanScores extends Component {
               ) : (
                 <div>Please select values to continue.</div>
               )}
-            </Card>
+            </Card> */}
           </Col>
         </Row>
       </div>

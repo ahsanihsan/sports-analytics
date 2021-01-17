@@ -48,8 +48,16 @@ export default class BatsmanScores extends Component {
     );
     this.setState({ isLoading: false });
     if (batsmanScores && batsmanScores.status === 200) {
+      let topPositions = batsmanScores.data.predictions.top_positions.map(
+        (item) => item - 1
+      );
+      topPositions.sort();
       this.setState({
         batsmanScores: batsmanScores.data.predictions,
+        topPositions,
+        totalByBatsman: batsmanScores.data.predictions.total,
+        foursByBatsman: batsmanScores.data.predictions.total_fours,
+        sixesByBatsman: batsmanScores.data.predictions.total_sixes,
         isLoading: false,
         predicted: true,
       });
@@ -57,9 +65,9 @@ export default class BatsmanScores extends Component {
       this.setState({ error: true, isLoading: false });
     }
   };
-  // componentDidMount() {
-  //   this.setState({ bating_team: "Pakistan", striker: "Azhar Ali" });
-  // }
+  componentDidMount() {
+    this.setState({ bating_team: "Pakistan", striker: "Azhar Ali" });
+  }
   mapVenue = (city) => {
     let venue = [];
     cityAndVenue.map((item) => {
@@ -105,64 +113,6 @@ export default class BatsmanScores extends Component {
   };
 
   render() {
-    const columns = [
-      {
-        title: "City",
-        dataIndex: "city",
-        key: "city",
-      },
-      {
-        title: "Team A",
-        dataIndex: " bat_team",
-        key: " bat_team",
-      },
-      {
-        title: "Team B",
-        dataIndex: "bowling_team",
-        key: "bowling_team",
-      },
-      {
-        title: "Score Team A",
-        dataIndex: "score_a",
-        key: "score_a",
-      },
-      {
-        title: "Score Team B",
-        dataIndex: "score_b",
-        key: "score_b",
-      },
-      {
-        title: "Match Type",
-        dataIndex: "match_type",
-        key: "match_type",
-      },
-      {
-        title: "Month",
-        dataIndex: "month",
-        key: "month",
-      },
-      {
-        title: "Winner",
-        dataIndex: "winner",
-        key: "winner",
-      },
-      {
-        title: "Venue",
-        dataIndex: "venue",
-        key: "venue",
-      },
-      {
-        title: "Toss Won",
-        dataIndex: "toss_won",
-        key: "toss_won",
-      },
-      {
-        title: "Toss Decision",
-        dataIndex: "toss_decision",
-        key: "toss_decision",
-      },
-    ];
-
     return (
       <div>
         <Row gutter={10}>
@@ -171,21 +121,20 @@ export default class BatsmanScores extends Component {
               <Form
                 name="basic"
                 onFinish={(values) => this.handleSubmit(values)}
-                // initialValues={{
-                //   venue: "Sheikh Zayed Stadium",
-                //   bating_team: "Pakistan",
-                //   striker: "Azhar Ali",
-                //   bowling_team: "India",
-                //   over: 10,
-                //   balls: 1,
-                //   score_by_striker_till_now: 16,
-                //   balls_played_by_striker_till_now: 10,
-
-                //   total_fours_by_striker_till_now: 2,
-                //   total_sixes_by_striker_till_now: 0,
-                //   total_dots_by_striker_till_now: 0,
-                //   total_batting_team_score_till_now: 100,
-                // }}
+                initialValues={{
+                  venue: "Sheikh Zayed Stadium",
+                  bating_team: "Pakistan",
+                  striker: "Azhar Ali",
+                  bowling_team: "India",
+                  over: 10,
+                  balls: 1,
+                  score_by_striker_till_now: 16,
+                  balls_played_by_striker_till_now: 10,
+                  total_fours_by_striker_till_now: 2,
+                  total_sixes_by_striker_till_now: 0,
+                  total_dots_by_striker_till_now: 0,
+                  total_batting_team_score_till_now: 100,
+                }}
               >
                 <Row>
                   <Col span={24}>
@@ -434,14 +383,61 @@ export default class BatsmanScores extends Component {
           </Col>
           <Col span={15}>
             <Card
-              title="Batsman Score"
+              title="Batsman Score And Boundaries Prediction"
               style={{ width: "100%", borderRadius: 10 }}
             >
               {this.state.isLoading ? (
                 <Spin />
               ) : this.state.predicted ? (
                 <div>
-                  <CChartBar
+                  <span style={{ fontSize: 16 }}>
+                    <h3 className="mb-2">Positions</h3>
+                    Batsman will perform best on{" "}
+                    <span style={{ fontSize: 18 }}>
+                      {this.state.topPositions.join(", ")}
+                    </span>{" "}
+                    position.
+                    {"\n"}
+                    <h3 className="mt-2 mb-2">Score</h3>
+                    <div className="mt-3">
+                      👉🏻 Batsman can score{" "}
+                      {this.state.totalByBatsman[this.state.topPositions[0]]} at{" "}
+                      position {this.state.topPositions[0]}.
+                    </div>
+                    <div className="mt-3">
+                      👉🏻 Batsman can score{" "}
+                      {this.state.totalByBatsman[this.state.topPositions[1]]} at{" "}
+                      position {this.state.topPositions[1]}.
+                    </div>
+                    <div className="mt-3">
+                      👉🏻 Batsman can score{" "}
+                      {this.state.totalByBatsman[this.state.topPositions[2]]} at{" "}
+                      position {this.state.topPositions[2]}.
+                    </div>
+                    <h3 className="mt-2 mb-2">Boundaries</h3>
+                    <div className="mt-3">
+                      👉🏻 Batsman can score{" "}
+                      {this.state.foursByBatsman[this.state.topPositions[0]]}{" "}
+                      fours and{" "}
+                      {this.state.foursByBatsman[this.state.topPositions[0]]}{" "}
+                      sixes at position {this.state.topPositions[0]}.
+                    </div>
+                    <div className="mt-3">
+                      👉🏻 Batsman can score{" "}
+                      {this.state.foursByBatsman[this.state.topPositions[1]]}{" "}
+                      fours and{" "}
+                      {this.state.foursByBatsman[this.state.topPositions[1]]}{" "}
+                      sixes at position {this.state.topPositions[1]}.
+                    </div>
+                    <div className="mt-3">
+                      👉🏻 Batsman can score{" "}
+                      {this.state.foursByBatsman[this.state.topPositions[2]]}{" "}
+                      fours and{" "}
+                      {this.state.foursByBatsman[this.state.topPositions[2]]}{" "}
+                      sixes at position {this.state.topPositions[2]}.
+                    </div>
+                  </span>
+                  {/* <CChartBar
                     type="bar"
                     datasets={[
                       {
@@ -456,13 +452,13 @@ export default class BatsmanScores extends Component {
                       },
                     }}
                     labels={["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]}
-                  />
+                  /> */}
                 </div>
               ) : (
                 <div>Please select values to continue.</div>
               )}
             </Card>
-            <Card
+            {/* <Card
               title="Batsman Fours"
               style={{ width: "100%", borderRadius: 10, marginTop: 10 }}
             >
@@ -519,7 +515,7 @@ export default class BatsmanScores extends Component {
               ) : (
                 <div>Please select values to continue.</div>
               )}
-            </Card>
+            </Card> */}
           </Col>
         </Row>
       </div>
