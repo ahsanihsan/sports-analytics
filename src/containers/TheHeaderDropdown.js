@@ -10,7 +10,7 @@ import {
 import CIcon from "@coreui/icons-react";
 const TheHeaderDropdown = (props) => {
   const onClick = () => {
-    // window.localStorage.setItem("isLogin", false);
+    window.localStorage.setItem("@token", "");
     props.history.push("/");
   };
   return (
