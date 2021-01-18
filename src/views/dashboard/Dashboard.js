@@ -78,6 +78,22 @@ export default class Dashboard extends Component {
                       Stream Match
                     </Button>
                   ) : undefined}
+                  {!item.name.includes("Test") &&
+                  !item.series.name.includes("KFC") &&
+                  !item.series.name.includes("Women") ? (
+                    <Button
+                      className="mr-2"
+                      type="primary"
+                      onClick={() =>
+                        this.props.history.push({
+                          pathname: "/live-match-prediction",
+                          search: item.id + "/" + item.series.id,
+                        })
+                      }
+                    >
+                      Predict Match
+                    </Button>
+                  ) : undefined}
                 </List.Item>
               )}
             />

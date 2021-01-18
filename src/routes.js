@@ -1,5 +1,6 @@
 import React from "react";
 import LiveMatch from "./views/dashboard/LiveMatch";
+import LiveMatchPrediction from "./views/dashboard/LiveMatchPrediction";
 
 const Toaster = React.lazy(() =>
   import("./views/notifications/toaster/Toaster")
@@ -73,10 +74,16 @@ const BatsmanScores = React.lazy(() =>
 const BatsmanScoresT20 = React.lazy(() =>
   import("./views/Predicitons/BatsmanScoresT20")
 );
+
 const routes = [
   // { path: "/", exact: true, name: "Home" },
   { path: "/matches", name: "Matches", component: Dashboard },
   { path: "/live-match", name: "Live Match", component: LiveMatch },
+  {
+    path: "/live-match-prediction",
+    name: "Live Match Prediction",
+    component: LiveMatchPrediction,
+  },
   {
     path: "/odi",
     name: "ODI Prediction",

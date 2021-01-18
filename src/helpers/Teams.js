@@ -202,7 +202,6 @@ export const Venue = [
   "Sheikh Zayed Stadium",
   "Sheikhupura Stadium",
   "Shere Bangla National Stadium",
-  "Shere Bangla National Stadium, Mirpur",
   "Sinhalese Sports Club Ground",
   "Sir Vivian Richards Stadium, North Sound",
   "Sophia Gardens",
