@@ -715,7 +715,7 @@ export default class T20 extends Component {
                         data: teamAPrediction.predictions.runrates,
                       },
                     ]}
-                    labels={["4", "8", "12", "16", "20"]}
+                    labels={["10", "20"]}
                     options={{
                       tooltips: {
                         enabled: true,
