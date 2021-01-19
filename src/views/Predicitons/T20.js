@@ -14,8 +14,10 @@ import {
   cityAndVenue,
   MatchTypes,
   Months,
+  T20_TEAMS,
   Teams,
   Venue,
+  VENUE_T20,
 } from "../../helpers/Teams";
 import constants from "../../helpers/constants";
 import { post } from "../../helpers/request";
@@ -135,7 +137,7 @@ export default class T20 extends Component {
 
   mapVenue = () => {
     let venue = [];
-    Venue.map((venueCity) => {
+    VENUE_T20.map((venueCity) => {
       venue.push(<Select.Option value={venueCity}>{venueCity}</Select.Option>);
     });
     return venue;
@@ -143,7 +145,7 @@ export default class T20 extends Component {
 
   mapTeams = (team) => {
     let content = [];
-    Teams.map((item) => {
+    T20_TEAMS.map((item) => {
       if (item !== team)
         content.push(<Select.Option value={item}>{item}</Select.Option>);
     });

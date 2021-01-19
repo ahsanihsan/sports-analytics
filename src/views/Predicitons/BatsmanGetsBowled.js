@@ -208,7 +208,7 @@ export default class BatsmanGetsBowled extends Component {
               </div>
               <div style={{ marginTop: 10 }}>
                 <label>Match Type</label>
-                <Select
+                {/* <Select
                   value={this.state.match_type}
                   onChange={(match_type) => this.setState({ match_type })}
                   placeholder="Select Match Type"
@@ -217,7 +217,7 @@ export default class BatsmanGetsBowled extends Component {
                   {MatchTypes.map((item) => {
                     return <Select.Option value={item}>{item}</Select.Option>;
                   })}
-                </Select>
+                </Select> */}
               </div>
               {this.state.team_a && this.state.team_b ? (
                 <div style={{ marginTop: 10 }}>

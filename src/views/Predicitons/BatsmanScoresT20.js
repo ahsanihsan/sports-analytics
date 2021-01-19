@@ -10,13 +10,15 @@ import {
   Spin,
   Table,
 } from "antd";
-import { Players } from "../../helpers/Players";
+import { PLAYERS_T20 } from "../../helpers/Players";
 import {
   cityAndVenue,
   MatchTypes,
   Months,
+  T20_TEAMS,
   Teams,
   Venue,
+  VENUE_T20,
 } from "../../helpers/Teams";
 import constants from "../../helpers/constants";
 import { post } from "../../helpers/request";
@@ -57,43 +59,17 @@ export default class BatsmanScores extends Component {
     }
   };
 
-  mapVenue = (city) => {
-    let venue = [];
-    cityAndVenue.map((item) => {
-      if (item.city === city) {
-        item.venue.map((venueCity) => {
-          venue.push(
-            <Select.Option value={venueCity}>{venueCity}</Select.Option>
-          );
-        });
-      }
-    });
-    return venue;
-  };
   renderTeams = () => {
-    let teams = [];
-    for (let key in Players) {
-      this.state.teams.push(key);
-      teams.push(<Select.Option value={key}>{key}</Select.Option>);
-    }
-    return teams;
+    return T20_TEAMS.map((item) => {
+      return <Select.Option value={item}>{item}</Select.Option>;
+    });
   };
+
   renderBatsmen = () => {
     let players = [];
-    for (let key in Players) {
+    for (let key in PLAYERS_T20) {
       if (key === this.state.bating_team) {
-        Players[key].batsmen.map((item) =>
-          players.push(<Select.Option value={item}>{item}</Select.Option>)
-        );
-      }
-    }
-    return players;
-  };
-  renderBowler = () => {
-    let players = [];
-    for (let key in Players) {
-      if (key === this.state.bowling_team) {
-        Players[key].bowlers.map((item) =>
+        PLAYERS_T20[key].striker.map((item) =>
           players.push(<Select.Option value={item}>{item}</Select.Option>)
         );
       }
@@ -102,64 +78,6 @@ export default class BatsmanScores extends Component {
   };
 
   render() {
-    const columns = [
-      {
-        title: "City",
-        dataIndex: "city",
-        key: "city",
-      },
-      {
-        title: "Team A",
-        dataIndex: " bat_team",
-        key: " bat_team",
-      },
-      {
-        title: "Team B",
-        dataIndex: "bowling_team",
-        key: "bowling_team",
-      },
-      {
-        title: "Score Team A",
-        dataIndex: "score_a",
-        key: "score_a",
-      },
-      {
-        title: "Score Team B",
-        dataIndex: "score_b",
-        key: "score_b",
-      },
-      {
-        title: "Match Type",
-        dataIndex: "match_type",
-        key: "match_type",
-      },
-      {
-        title: "Month",
-        dataIndex: "month",
-        key: "month",
-      },
-      {
-        title: "Winner",
-        dataIndex: "winner",
-        key: "winner",
-      },
-      {
-        title: "Venue",
-        dataIndex: "venue",
-        key: "venue",
-      },
-      {
-        title: "Toss Won",
-        dataIndex: "toss_won",
-        key: "toss_won",
-      },
-      {
-        title: "Toss Decision",
-        dataIndex: "toss_decision",
-        key: "toss_decision",
-      },
-    ];
-
     return (
       <div>
         <Row gutter={10}>
@@ -264,7 +182,7 @@ export default class BatsmanScores extends Component {
                       marginTop: 5,
                     }}
                   >
-                    {Venue.map((item) => {
+                    {VENUE_T20.map((item) => {
                       return <Select.Option value={item}>{item}</Select.Option>;
                     })}
                   </Select>

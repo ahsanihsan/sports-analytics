@@ -14,8 +14,10 @@ import {
   cityAndVenue,
   MatchTypes,
   Months,
+  ODI_TEAMS,
   Teams,
   Venue,
+  VENUE_ODI,
 } from "../../helpers/Teams";
 import constants from "../../helpers/constants";
 import { post } from "../../helpers/request";
@@ -137,7 +139,7 @@ export default class WhoWillWin extends Component {
 
   mapVenue = () => {
     let venue = [];
-    Venue.map((venueCity) => {
+    VENUE_ODI.map((venueCity) => {
       venue.push(<Select.Option value={venueCity}>{venueCity}</Select.Option>);
     });
     return venue;
@@ -145,7 +147,7 @@ export default class WhoWillWin extends Component {
 
   mapTeams = (team) => {
     let content = [];
-    Teams.map((item) => {
+    ODI_TEAMS.map((item) => {
       if (item !== team)
         content.push(<Select.Option value={item}>{item}</Select.Option>);
     });

@@ -10,13 +10,15 @@ import {
   Spin,
   Table,
 } from "antd";
-import { Players } from "../../helpers/Players";
+import { PLAYERS_ODI } from "../../helpers/Players";
 import {
   cityAndVenue,
   MatchTypes,
   Months,
+  ODI_TEAMS,
   Teams,
   Venue,
+  VENUE_ODI,
 } from "../../helpers/Teams";
 import constants from "../../helpers/constants";
 import { post } from "../../helpers/request";
@@ -81,30 +83,18 @@ export default class BatsmanScores extends Component {
     });
     return venue;
   };
+
   renderTeams = () => {
-    let teams = [];
-    for (let key in Players) {
-      this.state.teams.push(key);
-      teams.push(<Select.Option value={key}>{key}</Select.Option>);
-    }
-    return teams;
+    return ODI_TEAMS.map((item) => {
+      return <Select.Option value={item}>{item}</Select.Option>;
+    });
   };
+
   renderBatsmen = () => {
     let players = [];
-    for (let key in Players) {
+    for (let key in PLAYERS_ODI) {
       if (key === this.state.bating_team) {
-        Players[key].batsmen.map((item) =>
-          players.push(<Select.Option value={item}>{item}</Select.Option>)
-        );
-      }
-    }
-    return players;
-  };
-  renderBowler = () => {
-    let players = [];
-    for (let key in Players) {
-      if (key === this.state.bowling_team) {
-        Players[key].bowlers.map((item) =>
+        PLAYERS_ODI[key].striker.map((item) =>
           players.push(<Select.Option value={item}>{item}</Select.Option>)
         );
       }
@@ -231,7 +221,7 @@ export default class BatsmanScores extends Component {
                       marginTop: 5,
                     }}
                   >
-                    {Venue.map((item) => {
+                    {VENUE_ODI.map((item) => {
                       return <Select.Option value={item}>{item}</Select.Option>;
                     })}
                   </Select>
