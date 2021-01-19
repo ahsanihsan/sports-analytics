@@ -100,7 +100,6 @@ class Users extends React.Component {
         key: "action",
         render: (text, record) => {
           const isBan = record.isBlackListed === "Yes";
-          console.log(record);
           return (
             <div>
               <Popconfirm

@@ -75,8 +75,6 @@ export default class LiveMatchPrediction extends Component {
   };
 
   handleSubmitSecondIteration = async (values) => {
-    this.setState({ isLoading: true });
-
     let teamAPrediction = await post(
       constants.URL.PREDICTION.PREDICT_MATCH_WITH_TARGET_ODI,
       values
@@ -116,9 +114,10 @@ export default class LiveMatchPrediction extends Component {
         historyTeamB: teamBPrediction.data.data,
         team_a_second_iteration: values.bat_team,
         team_b_second_iteration: values.bowl_team,
-        isLoading: false,
-        predicted: true,
       });
+      setTimeout(() => {
+        this.setState({ isLoading: false, predicted: true });
+      }, 1000);
     } else {
       this.setState({ error: true, isLoading: false });
     }
@@ -194,12 +193,7 @@ export default class LiveMatchPrediction extends Component {
               this.handleSubmitSecondIteration(valuesSecondIteration);
               // }
             })
-            .catch((error) => {
-              console.log(error);
-              console.log(error);
-              console.log(error);
-              console.log(error);
-            });
+            .catch((error) => {});
         } else {
           this.setState({ match: "", isLoading: false });
         }
@@ -292,7 +286,7 @@ export default class LiveMatchPrediction extends Component {
     ];
     return (
       <div>
-        {this.state.isLoading ? (
+        {this.state.isLoading && !this.state.predicted ? (
           <Spin />
         ) : (
           <div>

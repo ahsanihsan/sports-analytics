@@ -15,7 +15,6 @@ export default class LiveMatch extends Component {
     };
   }
   componentDidMount() {
-    console.log(this.props.history);
     let search = this.props.history.location.search;
     search = search.split("/");
     let matchID = search[0].replace("?", "");
