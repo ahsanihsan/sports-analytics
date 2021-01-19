@@ -719,6 +719,15 @@ export default class WhoWillWin extends Component {
                       tooltips: {
                         enabled: true,
                       },
+                      scales: {
+                        yAxes: [
+                          {
+                            ticks: {
+                              beginAtZero: true,
+                            },
+                          },
+                        ],
+                      },
                     }}
                   />
                 </div>

@@ -720,6 +720,15 @@ export default class T20 extends Component {
                       tooltips: {
                         enabled: true,
                       },
+                      scales: {
+                        yAxes: [
+                          {
+                            ticks: {
+                              beginAtZero: true,
+                            },
+                          },
+                        ],
+                      },
                     }}
                   />
                 </div>
