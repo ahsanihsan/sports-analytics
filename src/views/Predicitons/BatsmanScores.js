@@ -41,6 +41,7 @@ export default class BatsmanScores extends Component {
 
   handleSubmit = async (values) => {
     values.over = values.over + "." + values.balls;
+
     this.setState({ isLoading: true });
     let batsmanScores = await post(
       constants.URL.PREDICTION.PREDICT_BATSMAN_WITH_TARGET_ODI,
@@ -419,21 +420,21 @@ export default class BatsmanScores extends Component {
                       👉🏻 Batsman can score{" "}
                       {this.state.foursByBatsman[this.state.topPositions[0]]}{" "}
                       fours and{" "}
-                      {this.state.foursByBatsman[this.state.topPositions[0]]}{" "}
+                      {this.state.sixesByBatsman[this.state.topPositions[0]]}{" "}
                       sixes at position {this.state.topPositions[0]}.
                     </div>
                     <div className="mt-3">
                       👉🏻 Batsman can score{" "}
                       {this.state.foursByBatsman[this.state.topPositions[1]]}{" "}
                       fours and{" "}
-                      {this.state.foursByBatsman[this.state.topPositions[1]]}{" "}
+                      {this.state.sixesByBatsman[this.state.topPositions[1]]}{" "}
                       sixes at position {this.state.topPositions[1]}.
                     </div>
                     <div className="mt-3">
                       👉🏻 Batsman can score{" "}
                       {this.state.foursByBatsman[this.state.topPositions[2]]}{" "}
                       fours and{" "}
-                      {this.state.foursByBatsman[this.state.topPositions[2]]}{" "}
+                      {this.state.sixesByBatsman[this.state.topPositions[2]]}{" "}
                       sixes at position {this.state.topPositions[2]}.
                     </div>
                   </span>
