@@ -130,6 +130,7 @@ export default class LiveMatchPrediction extends Component {
       {
         "x-rapidapi-key": "f893ea82cdmshe13a300c1080d0bp182fbejsnd7bb8eef91d6",
         useQueryString: true,
+        "Access-Control-Allow-Origin": "*",
       },
       {
         seriesid: seriesID,
@@ -138,13 +139,13 @@ export default class LiveMatchPrediction extends Component {
     )
       .then((response) => {
         if (response && response.data) {
-          console.log(response);
           get(
             "https://dev132-cricket-live-scores-v1.p.rapidapi.com/match.php",
             {
               "x-rapidapi-key":
                 "f893ea82cdmshe13a300c1080d0bp182fbejsnd7bb8eef91d6",
               useQueryString: true,
+              "Access-Control-Allow-Origin": "*",
             },
             {
               seriesid: response.data.matchDetail.matchSummary.series.id,
@@ -158,40 +159,40 @@ export default class LiveMatchPrediction extends Component {
               teamA = teamA.substring(0, teamA.length - 4);
               teamB = teamB.substring(0, teamB.length - 4);
 
-              if (match.status === "UPCOMING") {
-                let values = {
-                  venue: "Shere Bangla National Stadium",
-                  bat_team: teamA,
-                  bowl_team: teamB,
-                  runs: 0,
-                  wickets: 0,
-                  overs: 0.1,
-                  runs_last_5: 0,
-                  wickets_last_5: 0,
-                  fours_till_now: 0,
-                  sixes_till_now: 0,
-                  no_balls_till_now: 0,
-                  wide_balls_till_now: 0,
-                  target: 0,
-                };
-                this.handleSubmit(values);
-                let valuesSecondIteration = {
-                  venue: "Shere Bangla National Stadium",
-                  bat_team: teamB,
-                  bowl_team: teamA,
-                  runs: 0,
-                  wickets: 0,
-                  overs: 0.1,
-                  runs_last_5: 0,
-                  wickets_last_5: 0,
-                  fours_till_now: 0,
-                  sixes_till_now: 0,
-                  no_balls_till_now: 0,
-                  wide_balls_till_now: 0,
-                  target: 0,
-                };
-                this.handleSubmitSecondIteration(valuesSecondIteration);
-              }
+              // if (match.status === "UPCOMING") {
+              let values = {
+                venue: "Shere Bangla National Stadium",
+                bat_team: teamA,
+                bowl_team: teamB,
+                runs: 0,
+                wickets: 0,
+                overs: 0.1,
+                runs_last_5: 0,
+                wickets_last_5: 0,
+                fours_till_now: 0,
+                sixes_till_now: 0,
+                no_balls_till_now: 0,
+                wide_balls_till_now: 0,
+                target: 0,
+              };
+              this.handleSubmit(values);
+              let valuesSecondIteration = {
+                venue: "Shere Bangla National Stadium",
+                bat_team: teamB,
+                bowl_team: teamA,
+                runs: 0,
+                wickets: 0,
+                overs: 0.1,
+                runs_last_5: 0,
+                wickets_last_5: 0,
+                fours_till_now: 0,
+                sixes_till_now: 0,
+                no_balls_till_now: 0,
+                wide_balls_till_now: 0,
+                target: 0,
+              };
+              this.handleSubmitSecondIteration(valuesSecondIteration);
+              // }
             })
             .catch((error) => {
               console.log(error);

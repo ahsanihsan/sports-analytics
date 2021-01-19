@@ -51,6 +51,7 @@ export default class LiveMatch extends Component {
       {
         "x-rapidapi-key": "f893ea82cdmshe13a300c1080d0bp182fbejsnd7bb8eef91d6",
         useQueryString: true,
+        "Access-Control-Allow-Origin": "*",
       },
       {
         seriesid: seriesID,

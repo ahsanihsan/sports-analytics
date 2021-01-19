@@ -68,9 +68,9 @@ export default class BatsmanScores extends Component {
       this.setState({ error: true, isLoading: false });
     }
   };
-  componentDidMount() {
-    this.setState({ bating_team: "Pakistan", striker: "Azhar Ali" });
-  }
+  // componentDidMount() {
+  //   this.setState({ bating_team: "Pakistan", striker: "Azhar Ali" });
+  // }
   mapVenue = (city) => {
     let venue = [];
     cityAndVenue.map((item) => {
@@ -112,20 +112,20 @@ export default class BatsmanScores extends Component {
               <Form
                 name="basic"
                 onFinish={(values) => this.handleSubmit(values)}
-                initialValues={{
-                  venue: "Sheikh Zayed Stadium",
-                  bating_team: "Pakistan",
-                  striker: "Azhar Ali",
-                  bowling_team: "India",
-                  over: 10,
-                  balls: 1,
-                  score_by_striker_till_now: 16,
-                  balls_played_by_striker_till_now: 10,
-                  total_fours_by_striker_till_now: 2,
-                  total_sixes_by_striker_till_now: 0,
-                  total_dots_by_striker_till_now: 0,
-                  total_batting_team_score_till_now: 100,
-                }}
+                // initialValues={{
+                //   venue: "Sheikh Zayed Stadium",
+                //   bating_team: "Pakistan",
+                //   striker: "Azhar Ali",
+                //   bowling_team: "India",
+                //   over: 10,
+                //   balls: 1,
+                //   score_by_striker_till_now: 16,
+                //   balls_played_by_striker_till_now: 10,
+                //   total_fours_by_striker_till_now: 2,
+                //   total_sixes_by_striker_till_now: 0,
+                //   total_dots_by_striker_till_now: 0,
+                //   total_batting_team_score_till_now: 100,
+                // }}
               >
                 <Row>
                   <Col span={24}>

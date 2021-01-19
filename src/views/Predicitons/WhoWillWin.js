@@ -53,23 +53,23 @@ export default class WhoWillWin extends Component {
     };
   }
 
-  componentDidMount() {
-    this.setState({
-      venue: "Sharjah Cricket Stadium",
-      team_a: "Pakistan",
-      team_b: "England",
-      runs: 100,
-      wickets: 3,
-      overs: 5,
-      balls: 1,
-      runs_last_5: 10,
-      wickets_last_5: 0,
-      fours_till_now: 0,
-      sixes_till_now: 1,
-      no_balls_till_now: 0,
-      wide_balls_till_now: 0,
-    });
-  }
+  // componentDidMount() {
+  //   this.setState({
+  //     venue: "Sharjah Cricket Stadium",
+  //     team_a: "Pakistan",
+  //     team_b: "England",
+  //     runs: 100,
+  //     wickets: 3,
+  //     overs: 5,
+  //     balls: 1,
+  //     runs_last_5: 10,
+  //     wickets_last_5: 0,
+  //     fours_till_now: 0,
+  //     sixes_till_now: 1,
+  //     no_balls_till_now: 0,
+  //     wide_balls_till_now: 0,
+  //   });
+  // }
 
   handleSubmit = async (values) => {
     const dataA = {
@@ -120,10 +120,6 @@ export default class WhoWillWin extends Component {
       teamAPrediction.data &&
       teamBPrediction.data
     ) {
-      console.log("******* HELLO *******");
-      console.log(teamAPrediction.data);
-      console.log(teamBPrediction.data);
-      console.log("******* HELLO *******");
       this.setState({
         teamAPrediction: teamAPrediction.data,
         teamBPrediction: teamBPrediction.data,
@@ -227,21 +223,21 @@ export default class WhoWillWin extends Component {
           <Col xxl={9} xl={9} md={9} sm={24} xs={24}>
             <Card title="Team Data" style={{ width: "100%", borderRadius: 10 }}>
               <Form
-                initialValues={{
-                  venue: "Sharjah Cricket Stadium",
-                  team_a: "Pakistan",
-                  team_b: "England",
-                  runs: 100,
-                  wickets: 3,
-                  overs: 5,
-                  balls: 1,
-                  runs_last_5: 10,
-                  wickets_last_5: 0,
-                  fours_till_now: 0,
-                  sixes_till_now: 1,
-                  no_balls_till_now: 0,
-                  wide_balls_till_now: 0,
-                }}
+                // initialValues={{
+                //   venue: "Sharjah Cricket Stadium",
+                //   team_a: "Pakistan",
+                //   team_b: "England",
+                //   runs: 100,
+                //   wickets: 3,
+                //   overs: 5,
+                //   balls: 1,
+                //   runs_last_5: 10,
+                //   wickets_last_5: 0,
+                //   fours_till_now: 0,
+                //   sixes_till_now: 1,
+                //   no_balls_till_now: 0,
+                //   wide_balls_till_now: 0,
+                // }}
                 name="basic"
                 onFinish={(values) => this.handleSubmit(values)}
               >

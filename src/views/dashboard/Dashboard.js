@@ -19,6 +19,7 @@ export default class Dashboard extends Component {
   liveMatches = () => {
     get("https://dev132-cricket-live-scores-v1.p.rapidapi.com/matches.php", {
       "x-rapidapi-key": "f893ea82cdmshe13a300c1080d0bp182fbejsnd7bb8eef91d6",
+      "Access-Control-Allow-Origin": "*",
     })
       .then((response) => {
         if (response && response.data) {
